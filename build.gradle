@@ -52,7 +52,7 @@ jacoco {
 
 tasks.withType(FindBugs) {
     reports {
-        html.enabled = true
+        html.enabled = false
         xml.enabled = true
     }
 }
