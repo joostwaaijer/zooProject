@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6ccc95fe-ed7b-43cb-a27e-4e4b1af4bc52" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/ZooTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ZooTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="6ccc95fe-ed7b-43cb-a27e-4e4b1af4bc52" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,16 +65,10 @@
       <file leaf-file-name="ZooTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/ZooTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="89">
-              <caret line="140" column="4" selection-start-line="140" selection-start-column="4" selection-end-line="143" selection-end-column="5" />
+            <state relative-caret-position="116">
+              <caret line="164" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="164" selection-end-column="4" />
               <folding>
-                <element signature="e#3893#3894#0" expanded="true" />
-                <element signature="e#3927#3928#0" expanded="true" />
-                <element signature="e#4199#4200#0" expanded="true" />
-                <element signature="e#4233#4234#0" expanded="true" />
-                <element signature="e#4410#4411#0" expanded="true" />
-                <element signature="e#4444#4445#0" expanded="true" />
-                <marker date="1530264747379" expanded="true" signature="4349:4429" ph="..." />
+                <marker date="1530264942934" expanded="true" signature="4367:4453" ph="..." />
               </folding>
             </state>
           </provider>
@@ -277,12 +269,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1530262586977</updated>
-      <workItem from="1530262588064" duration="1860000" />
+      <workItem from="1530262588064" duration="2056000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1860000" />
+    <option name="totallyTimeSpent" value="2056000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="227" y="23" width="1141" height="714" extended-state="0" />
@@ -349,16 +341,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/ZooTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="140" column="4" selection-start-line="140" selection-start-column="4" selection-end-line="143" selection-end-column="5" />
+        <state relative-caret-position="116">
+          <caret line="164" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="164" selection-end-column="4" />
           <folding>
-            <element signature="e#3893#3894#0" expanded="true" />
-            <element signature="e#3927#3928#0" expanded="true" />
-            <element signature="e#4199#4200#0" expanded="true" />
-            <element signature="e#4233#4234#0" expanded="true" />
-            <element signature="e#4410#4411#0" expanded="true" />
-            <element signature="e#4444#4445#0" expanded="true" />
-            <marker date="1530264747379" expanded="true" signature="4349:4429" ph="..." />
+            <marker date="1530264942934" expanded="true" signature="4367:4453" ph="..." />
           </folding>
         </state>
       </provider>
