@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InputChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">InputChecker.java</span></div><h1>InputChecker.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.event.KeyEvent;
+import javax.swing.JTextField;
+
+/**
+ * A class to validate keyboard input.
+ * 
+ * @author R.Akkersdijk
+ */
+// package-private class
+<span class="nc" id="L12">class InputChecker {</span>
+
+	// Some edit key ?
+	public static boolean isEditKey(KeyEvent ev) {
+<span class="nc" id="L16">		int n = ev.getKeyCode();</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">		switch (n) {</span>
+			case KeyEvent.VK_HOME:
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_KP_LEFT:
+			case KeyEvent.VK_BACK_SPACE:
+			case KeyEvent.VK_DELETE:
+			case KeyEvent.VK_KP_RIGHT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_END:
+<span class="nc" id="L26">				return true;</span>
+		}
+<span class="nc" id="L28">		return false;</span>
+	}
+
+	// Is this a valid key event for a number
+	public static boolean isNumberKey(JTextField caller, KeyEvent ev, boolean period) {
+<span class="nc" id="L33">		char c = ev.getKeyChar();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		if (java.lang.Character.isDigit(c))</span>
+<span class="nc" id="L35">			return true;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if (c == '-') { // only allowed a first position</span>
+<span class="nc" id="L37">			int caretPosition = caller.getCaretPosition();</span>
+			// System.out.println(&quot;NC: c=&quot;+c+&quot; @ &quot;+caretPosition);
+<span class="nc bnc" id="L39" title="All 2 branches missed.">			return (caretPosition == 0);</span>
+		}
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if (period) { // period allowed ?</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">			if (c == '.') {</span>
+<span class="nc" id="L43">				String tryText = caller.getText();</span>
+				// System.out.println(&quot;NC '&quot;+tryText+&quot;'&quot;);
+<span class="nc" id="L45">				int index = tryText.indexOf('.'); // already a . ?</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">				return (index == -1);</span>
+			}
+		}
+<span class="nc" id="L49">		return false;</span>
+	}
+
+	// Is this a valid key event for a word/name
+	public static boolean isWordKey(JTextField caller, KeyEvent ev, boolean space) {
+<span class="nc" id="L54">		char c = ev.getKeyChar();</span>
+<span class="nc bnc" id="L55" title="All 6 branches missed.">		if (java.lang.Character.isDigit(c) || (space &amp;&amp; c == ' ')) // space allowed?</span>
+<span class="nc" id="L56">			return true;</span>
+<span class="nc" id="L57">		return false;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

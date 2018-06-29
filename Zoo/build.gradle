@@ -1,0 +1,59 @@
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'idea'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Zoo': 'Zoo project',
+                'Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}
+
+checkstyle {
+    toolVersion = "8.8"
+}
+
+findbugs {
+    toolVersion = "3.0.1"
+    effort = "max"
+    ignoreFailures = true
+}
+
+jacoco {
+    toolVersion = "0.8.1"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        html.enabled = true
+        xml.enabled = false
+    }
+}
+

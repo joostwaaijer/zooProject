@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Reporter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">Reporter.java</span></div><h1>Reporter.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+import javax.swing.*;
+
+/**
+ * Provides an alternative for the standard output.
+ * 
+ * You could also use it to send System.out to a window by using:
+ * 
+ * &lt;pre&gt;
+ * System.out(reporter.getPrintStream());
+ * &lt;/pre&gt;
+ * 
+ * The user can copy &amp;amp; paste the contents for further use.
+ * 
+ * @author E.Jannink
+ * @author R.Akkersdijk
+ * @version 10 november 2014
+ */
+<span class="nc bnc" id="L25" title="All 2 branches missed.">@SuppressWarnings(&quot;serial&quot;)</span>
+public class Reporter extends JDialog {
+
+	// The attributes
+
+	private JTextArea textArea; // the actual contents
+
+<span class="nc" id="L32">	private static int counter = 0; // to ensure multiple Reporter instances</span>
+									// don't overlap
+
+	/**
+	 * Constructs a small outputFrame of size(10, 30) and shows it.
+	 * 
+	 * The frame is closeable();
+	 * 
+	 * @param title
+	 *            The title of the window
+	 */
+	public Reporter(String title) {
+<span class="nc" id="L44">		this(title, 10, 30);</span>
+<span class="nc" id="L45">	}</span>
+
+	/**
+	 * Constructs an outputFrame of given size and shows it.
+	 * 
+	 * The frame is closeable().
+	 * 
+	 * @param title
+	 *            The title of the window
+	 * @param rows
+	 *            The number of text rows
+	 * @param cols
+	 *            The number of text columns
+	 * 
+	 * @exception AssertionError
+	 *                title String can not be null
+	 * @exception AssertionError
+	 *                title String can not be empty
+	 * @exception AssertionError
+	 *                rows must at least be one
+	 * @exception AssertionError
+	 *                cols must at least be one
+	 */
+	public Reporter(String title, int rows, int cols) {
+<span class="nc" id="L69">		super(new JFrame(), title, false);</span>
+
+<span class="nc bnc" id="L71" title="All 4 branches missed.">		assert title != null : &quot;title String can not be null&quot;;</span>
+<span class="nc bnc" id="L72" title="All 4 branches missed.">		assert !title.isEmpty() : &quot;title String can not be empty&quot;;</span>
+<span class="nc bnc" id="L73" title="All 4 branches missed.">		assert rows &gt; 0 : &quot;rows must at least be one&quot;;</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">		assert cols &gt; 0 : &quot;cols must at least be one&quot;;</span>
+
+<span class="nc" id="L76">		textArea = new JTextArea(rows, cols);</span>
+<span class="nc" id="L77">		addWindowListener(new WindowAdapter() {</span>
+			public void windowClosing(WindowEvent e) {
+				// dispose(); // not used because of slow response
+<span class="nc" id="L80">				remove();</span>
+<span class="nc" id="L81">			}</span>
+		});
+
+		// add some default offset to stack multiple instances
+<span class="nc" id="L85">		setLocation(20 + counter * 20, 20 + counter * 20);</span>
+<span class="nc" id="L86">		++counter;</span>
+
+		// contents
+<span class="nc" id="L89">		textArea.setFont(new Font(&quot;Monospaced&quot;, Font.BOLD, 16));</span>
+<span class="nc" id="L90">		textArea.setEditable(false);</span>
+<span class="nc" id="L91">		textArea.setLineWrap(false);</span>
+		// add the textarea to the window
+<span class="nc" id="L93">		JScrollPane jsp = new JScrollPane(textArea);</span>
+<span class="nc" id="L94">		add(jsp);</span>
+<span class="nc" id="L95">		pack();</span>
+<span class="nc" id="L96">		setVisible(true);</span>
+<span class="nc" id="L97">	}</span>
+
+	// ---------------------------
+
+	/**
+	 * Set the text color. This applies to the entire window!
+	 * 
+	 * @param color
+	 *            The desired foreground color
+	 * 
+	 * @exception AssertionError
+	 *                can not set foreground to null color
+	 */
+	@Override
+	public void setForeground(Color color) {
+<span class="nc bnc" id="L112" title="All 4 branches missed.">		assert color != null : &quot;can not set foreground to null color&quot;;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (textArea == null)</span>
+<span class="nc" id="L114">			super.setForeground(color);</span>
+		else
+<span class="nc" id="L116">			textArea.setForeground(color);</span>
+<span class="nc" id="L117">	}</span>
+
+	/**
+	 * Set the background color. This applies to the entire window!
+	 * 
+	 * @param color
+	 *            The desired background color
+	 * 
+	 * @exception AssertionError
+	 *                can not set background to null color
+	 */
+	@Override
+	public void setBackground(Color color) {
+<span class="nc bnc" id="L130" title="All 4 branches missed.">		assert color != null : &quot;can not set background to null color&quot;;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">		if (textArea == null)</span>
+<span class="nc" id="L132">			super.setBackground(color);</span>
+		else
+<span class="nc" id="L134">			textArea.setBackground(color);</span>
+<span class="nc" id="L135">	}</span>
+
+	/**
+	 * Set the text font. This applies to the entire window!
+	 * 
+	 * @param font
+	 *            the desired font
+	 * @exception AssertionError
+	 *                can not set font to null font
+	 */
+	@Override
+	public void setFont(Font font) {
+<span class="nc bnc" id="L147" title="All 4 branches missed.">		assert font != null : &quot;can not set font to null font&quot;;</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">		if (textArea == null)</span>
+<span class="nc" id="L149">			super.setFont(font);</span>
+		else
+<span class="nc" id="L151">			textArea.setFont(font);</span>
+<span class="nc" id="L152">	}</span>
+
+	// ---------------------------
+
+	/**
+	 * Returns an OutputStream on the outputFrame.
+	 * 
+	 * @return the outputstream
+	 */
+	public OutputStream getOutputStream() {
+<span class="nc" id="L162">		return new JTextAreaOutputStream(textArea);</span>
+	}
+
+	/**
+	 * Returns a PrintStream on the outputFrame which e.g. could be used for
+	 * System.setout(...);
+	 * 
+	 * @return the printstream
+	 */
+	public PrintStream getPrintStream() {
+<span class="nc" id="L172">		return new PrintStream(getOutputStream());</span>
+	}
+
+	// ---------------------------
+
+	/**
+	 * Appends thisText to the contents of the outputFrame.
+	 * 
+	 * @param thisText
+	 *            the text to be added
+	 * 
+	 * @exception AssertionError
+	 *                can not append a null string
+	 */
+	public void print(String thisText) {
+<span class="nc bnc" id="L187" title="All 4 branches missed.">		assert thisText != null : &quot;can not append a null string&quot;;</span>
+<span class="nc" id="L188">		textArea.append(thisText);</span>
+<span class="nc" id="L189">	}</span>
+
+	/**
+	 * Appends thisText to the outputFrame, adding an EOL character.
+	 * 
+	 * @param thisText
+	 *            the text to be added
+	 * 
+	 * @exception AssertionError
+	 *                can not append a null string
+	 */
+	public void println(String thisText) {
+<span class="nc bnc" id="L201" title="All 4 branches missed.">		assert thisText != null : &quot;can not append a null string&quot;;</span>
+<span class="nc" id="L202">		print(thisText + &quot;\n&quot;);</span>
+<span class="nc" id="L203">	}</span>
+
+	/**
+	 * Appends an EOL character to the outputFrame
+	 */
+	public void println() {
+<span class="nc" id="L209">		println(&quot;&quot;);</span>
+<span class="nc" id="L210">	}</span>
+
+	// ---------------------------
+
+	/**
+	 * Removes this reporter, same as closing the window.
+	 */
+	public void remove() {
+		// dispose(); // not used cause of slow response
+<span class="nc" id="L219">		setVisible(false);</span>
+<span class="nc" id="L220">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ZooTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2018-06-27T13:16:50" hostname="Laptops-MacBook-Pro.local" time="0.019">
+  <properties/>
+  <testcase name="testMakeCageEmpty" classname="ZooTest" time="0.003"/>
+  <testcase name="testZoo" classname="ZooTest" time="0.0"/>
+  <testcase name="testAnimals" classname="ZooTest" time="0.011"/>
+  <testcase name="testZooNull" classname="ZooTest" time="0.0"/>
+  <testcase name="testRemoveAnimal" classname="ZooTest" time="0.001"/>
+  <testcase name="testWerknemers" classname="ZooTest" time="0.001"/>
+  <testcase name="testFindCageEmpty" classname="ZooTest" time="0.0"/>
+  <testcase name="testFindCageNull" classname="ZooTest" time="0.0"/>
+  <testcase name="testMakeCageDuplicate" classname="ZooTest" time="0.0"/>
+  <testcase name="testZooEmpty" classname="ZooTest" time="0.0"/>
+  <testcase name="testMakeCageNull" classname="ZooTest" time="0.0"/>
+  <system-out><![CDATA[toto removed
+administrator 101 removed
+   manager 100 removed
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

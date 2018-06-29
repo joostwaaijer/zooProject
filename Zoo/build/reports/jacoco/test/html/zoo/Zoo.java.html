@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Zoo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">zoo</a> &gt; <span class="el_source">Zoo.java</span></div><h1>Zoo.java</h1><pre class="source lang-java linenums">package zoo;
+
+import java.util.TreeMap;
+//import java.util.Vector;		// no longer needed
+// for saveFile at the end
+import java.io.PrintWriter;
+
+
+/**
+ * All information about a zoo.
+ * 
+ * @author R.Akkersdijk
+ */
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">public class Zoo</span>
+{
+
+	// the name of the zoo
+	private final String the_name;
+
+	// the cages containing animals ...
+	// those cages will be made on demand
+	// but they are kept around when they become empty
+	private final TreeMap&lt;String,Cage&gt; the_cages;			// &lt;kind,cage&gt;
+
+	// all employees
+	private final TreeMap&lt;Integer,Employee&gt; the_employees; // &lt;number,employee&gt;
+
+<span class="fc" id="L28">	public Zoo(String a_name) {</span>
+<span class="pc bpc" id="L29" title="1 of 4 branches missed.">		assert a_name != null : &quot;null name&quot;;			// M</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">		assert !a_name.isEmpty() : &quot;empty name&quot;;		// M</span>
+
+<span class="fc" id="L32">		the_name = a_name;</span>
+<span class="fc" id="L33">		the_cages = new TreeMap&lt;String,Cage&gt;();</span>
+<span class="fc" id="L34">		the_employees = new TreeMap&lt;Integer,Employee&gt;();</span>
+<span class="fc" id="L35">	}</span>
+
+	public String getName() {
+<span class="fc" id="L38">		return the_name;</span>
+	}
+
+	// ---------------------
+	// about animals
+	// ---------------------
+
+	// Add an animal
+	public void addAnimal(Animal animal) {
+<span class="pc bpc" id="L47" title="2 of 4 branches missed.">		assert animal != null : &quot;null animal&quot;;</span>
+<span class="fc" id="L48">		Cage cage = findCage(animal.getKind());	// find the cage for those animals</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		if (cage == null)						// non existent yet?</span>
+<span class="fc" id="L50">			cage = makeCage(animal.getKind());	// then make a new cage</span>
+		// Second Assignment: This is should be done by the cage!
+<span class="fc" id="L52">		cage.addAnimal(animal);</span>
+//		TreeMap&lt;String,Animal&gt; animals = cage.getAnimals(); // ask for the list of animals
+//		animals.put(animal.getName(), animal);	// add new animal to the list
+<span class="fc" id="L55">	} // addAnimal</span>
+
+	// Find the cage for some kind a animal (null=not found)
+	public Cage findCage(String animalKind) {
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">		assert animalKind != null : &quot;null animal kind&quot;;</span>
+<span class="pc bpc" id="L60" title="1 of 4 branches missed.">		assert !animalKind.isEmpty() : &quot;empty animal kind&quot;;</span>
+<span class="fc" id="L61">		return the_cages.get(animalKind);</span>
+	} // findCage
+
+	// Make a cage for some kind of animal
+	public Cage makeCage(String animalKind) {
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">		assert animalKind != null : &quot;null animal kind&quot;;</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">		assert !animalKind.isEmpty() : &quot;empty animal kind&quot;;		</span>
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">		assert !the_cages.containsKey(animalKind)</span>
+				: &quot;Cage for &quot; + animalKind + &quot; already exists&quot;;
+<span class="fc" id="L70">		Cage cage = new Cage(animalKind); // make the cage</span>
+<span class="fc" id="L71">		the_cages.put(animalKind, cage); // register the new cage</span>
+<span class="fc" id="L72">		return cage;</span>
+	} // makeCage
+
+	// Remove an animal
+	public void removeAnimal(String animalKind, String animalName) {
+<span class="pc bpc" id="L77" title="2 of 4 branches missed.">		assert animalKind != null : &quot;null animal kind&quot;;</span>
+<span class="pc bpc" id="L78" title="2 of 4 branches missed.">		assert !animalKind.isEmpty() : &quot;empty animal kind&quot;;</span>
+<span class="pc bpc" id="L79" title="2 of 4 branches missed.">		assert animalName != null : &quot;null animal name&quot;;</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">		assert !animalName.isEmpty() : &quot;empty animal name&quot;;</span>
+<span class="fc" id="L81">		Cage cage = findCage(animalKind);</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">		assert cage != null : &quot;no such cage&quot;;</span>
+		// Second Assignment: This is should be done by the cage!
+<span class="fc" id="L84">		cage.removeAnimal(animalName);</span>
+<span class="fc" id="L85">		System.out.println(animalName + &quot; removed&quot;);</span>
+//		// Ask for the list of animals
+//		TreeMap&lt;String,Animal&gt; animals = cage.getAnimals();
+//		// Find that animal
+//		Animal animal = animals.get(animalName);
+//		if (animal != null) {
+//			// TODO: remove that animal from list [DONE]
+//			System.out.println(animal + &quot; removed&quot;);
+//			return; // ready
+//		}
+//		// We should never get here, something went wrong!
+//		assert false : &quot;Animal &quot; + animalKind + &quot;:&quot; + animalName + &quot; not found&quot;;	// M
+<span class="fc" id="L97">	} // removeAnimal</span>
+
+	// List all animals in all cages
+	public void showAnimals() {
+<span class="nc" id="L101">		System.out.println(&quot;List of all animals&quot;);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">		if (the_cages.isEmpty())</span>
+<span class="nc" id="L103">			System.out.println(&quot;\tthere are no cages&quot;);</span>
+		else {
+			// For all cages
+<span class="nc bnc" id="L106" title="All 2 branches missed.">			for (Cage cage : the_cages.values()) {</span>
+<span class="nc" id="L107">				cage.print();</span>
+				// Second Assignment: This is should be done by the cage!
+<span class="nc" id="L109">				cage.printAnimals();</span>
+//				// Get list of animals
+//				TreeMap&lt;String,Animal&gt; animals = cage.getAnimals();
+//				if (animals.isEmpty())
+//					System.out.println(&quot;\tis empty&quot;);
+//				else { // Print the list of animals
+//					System.out.println(&quot;kind\tname\tage&quot;);
+//					for (Animal animal : animals.values())
+//						animal.print();
+//				}
+<span class="nc" id="L119">			}</span>
+		}
+<span class="nc" id="L121">	} // showAnimals</span>
+
+	// Any animals in the zoo ?
+	public boolean hasAnimals() {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">		if (the_cages.isEmpty())</span>
+<span class="fc" id="L126">			return false;</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">		for (Cage cage : the_cages.values()) {</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">			if (cage.hasAnimals()) return true;</span>
+//			if (cage.getAnimals().size() &gt; 0) return true;
+<span class="fc" id="L130">		}</span>
+<span class="fc" id="L131">		return false;</span>
+	} // hasAnimals
+
+	// ---------------------
+	// about employees
+	// ---------------------
+
+	// Add a new employee
+	public void addEmployee(int employeeNumber, Employee employee) {
+<span class="pc bpc" id="L140" title="2 of 4 branches missed.">		assert Employee.isValidEmployeeNumber(employeeNumber) : &quot;invalid number&quot;;</span>
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">		assert employee != null : &quot;null employee&quot;;</span>
+<span class="pc bpc" id="L142" title="2 of 4 branches missed.">		assert employee.getNumber() == employeeNumber : &quot;numbers do not match&quot;;</span>
+		// TODO: Is this a unique employee number? [DONE]
+<span class="pc bpc" id="L144" title="2 of 4 branches missed.">		assert !the_employees.containsKey(employeeNumber) : &quot;duplicate number&quot;;</span>
+<span class="fc" id="L145">		the_employees.put(employeeNumber, employee);</span>
+<span class="fc" id="L146">	} // addEmployee</span>
+
+	// Assign an employee to a manager (and vice versa)
+	public void assignManager(int managerNumber, Employee employee) {
+<span class="pc bpc" id="L150" title="2 of 4 branches missed.">		assert Employee.isValidEmployeeNumber(managerNumber) : &quot;invalid manager number&quot;;</span>
+<span class="pc bpc" id="L151" title="2 of 4 branches missed.">		assert employee != null : &quot;null employee&quot;;	</span>
+<span class="fc" id="L152">		Employee manager = the_employees.get(managerNumber);</span>
+<span class="pc bpc" id="L153" title="2 of 4 branches missed.">		assert manager != null : &quot;no such manager&quot;;</span>
+		// Third assignment: Is that really a manager?
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">		assert manager instanceof Manager : &quot;manager is not a Manager&quot;;</span>
+<span class="fc" id="L156">		((Manager)manager).addEmployee(employee);</span>
+//		employee.setManager(manager); // inform the employee ...
+//		Vector&lt;Employee&gt; employees = manager.getEmployees();
+//		employees.add(employee); // ... and his manager
+<span class="fc" id="L160">	} // assignManager</span>
+
+	// Do we have any managers ?
+	public boolean hasManagers() {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">		for (Employee employee : the_employees.values()) {</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">			if (employee instanceof Manager)</span>
+//			if (Employee.MANAGER == employee.getType())
+<span class="fc" id="L167">				return true;</span>
+<span class="nc" id="L168">		}</span>
+<span class="fc" id="L169">		return false;</span>
+	} // hasManagers
+
+	// Do we have any employees ?
+	public boolean hasEmployees() {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">		return !the_employees.isEmpty();</span>
+	} // hasEmployees
+
+	// List all managers
+	public void showManagers() {
+<span class="nc" id="L179">		System.out.println(&quot;List of all managers&quot;);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		for (Employee employee : the_employees.values()) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (employee instanceof Manager) {</span>
+//			if (Employee.MANAGER == employee.getType()) {
+<span class="nc" id="L183">				employee.print();</span>
+<span class="nc" id="L184">				System.out.println();</span>
+			}
+<span class="nc" id="L186">		}</span>
+<span class="nc" id="L187">	} // showManagers</span>
+
+	// Remove some employee
+	public void removeEmployee(int employeeNumber) {
+<span class="pc bpc" id="L191" title="2 of 4 branches missed.">		assert Employee.isValidEmployeeNumber(employeeNumber) : &quot;invalid employee number&quot;;</span>
+<span class="fc" id="L192">		Employee employee = the_employees.get(employeeNumber);</span>
+<span class="pc bpc" id="L193" title="2 of 4 branches missed.">		assert employee != null : &quot;Employee &quot; + employeeNumber + &quot; not found&quot;;</span>
+		// TODO: employee should tell his manager he is leaving! [DONE]
+<span class="fc" id="L195">		employee.isLeaving();</span>
+<span class="fc" id="L196">		the_employees.remove(employeeNumber); // and forget employee</span>
+<span class="fc" id="L197">		System.out.println(employee + &quot; removed&quot;);</span>
+<span class="fc" id="L198">	} // removeEmployee</span>
+
+	// List all employees
+	public void showEmployees() {
+<span class="nc" id="L202">		System.out.println(&quot;List of all employees&quot;);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		if (the_employees.isEmpty())</span>
+<span class="nc" id="L204">			System.out.println(&quot;\tis empty&quot;);</span>
+		else {
+<span class="nc" id="L206">			System.out.println(&quot;     employee\tname\tage\tsalary\t\tremarks&quot;);</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">			for (Employee employee : the_employees.values()) {</span>
+<span class="nc" id="L208">				employee.print();</span>
+<span class="nc" id="L209">				System.out.println();</span>
+<span class="nc" id="L210">			}</span>
+		}
+<span class="nc" id="L212">	} // showEmployees</span>
+
+	// Calculate total salary costs
+	public void showCosts() {
+<span class="nc" id="L216">		System.out.print(&quot;Total salary costs are &quot;);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">		if (the_employees.isEmpty())</span>
+<span class="nc" id="L218">			System.out.println(&quot;nothing&quot;);</span>
+		else {
+<span class="nc" id="L220">			int costs = 0;</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">			for (Employee employee : the_employees.values())</span>
+<span class="nc" id="L222">				costs += employee.getSalary();</span>
+<span class="nc" id="L223">			System.out.println(costs + &quot; euro&quot;);</span>
+		}
+<span class="nc" id="L225">	} // showCosts</span>
+
+	// ===========================================================
+	// Save all data in a file
+	public void saveFile(PrintWriter out) {
+<span class="nc bnc" id="L230" title="All 4 branches missed.">		assert out != null : &quot;null PrintWriter&quot;;</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">		for (Cage cage : the_cages.values())</span>
+<span class="nc" id="L232">			cage.saveFile(out);</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">		for (Employee employee : the_employees.values())</span>
+<span class="nc" id="L234">			employee.saveFile(out);</span>
+<span class="nc" id="L235">	} // saveFile</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

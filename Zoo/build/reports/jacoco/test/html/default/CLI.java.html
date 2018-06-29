@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">CLI.java</span></div><h1>CLI.java</h1><pre class="source lang-java linenums">// ===============================================================
+//       IN PRINCIPE HOEF JE IN DEZE FILE NIETS TE VERANDEREN
+//    TOTDAT JE NIEUWE CLASSES TOEVOEGT OF BESTAANDE VERWIJDERT
+//				WAT PAS GEBEURT BIJ OPDRACHT 3
+// ===============================================================
+//
+// Change  2.1:
+// AKK 20150618 - removed lots of safeguard code
+// Change  1.4.4:
+// AKK 20150602 - removed various use-case limitations
+// Changes 1.4.2:
+// AKK 20140318 - disable some choices depending on presence of animals/employees
+// Changes 1.4.1:
+// AKK 20130515 - moved 'assert checked' message to the constructor
+// AKK 20130515 - removed 'dierentuin' parameter from methods, use an attribute instead
+// AKK 20130515 - un-static-ed all methods and created a Main instance instead
+// AKK 20130405 - removed the AssertionError try/catch code again.
+// Changes 1.3.3:
+// AKK 20130309 - the scanner was never closed
+// AKK 20130309 - removed the ansi-escape strings
+// AKK 20120403 - AssertionError try/catch toegevoegd
+// Changes 1.3.2:
+// AKK 20120322 - eclipse cannot handle the ansi-escapes in the c_* strings
+// AKK 20120322 - eclipse cannot handle the ansi-escapes in the asserts check
+// AKK 20120322 - eclipse executes the program in the wrong directory,
+//					adjusted the built-in save_file names.
+// AKK 20120322 - when catching an IOException saveFile would always complain
+//					about 'dierentuin.txt' rather than about the current save_file.
+// AKK 20120322 - added example asserts to the internal methods.
+
+// Voor load/save dierentuin
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+//import java.io.IOException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import util.ReadInput;
+import zoo.Administrator;
+import zoo.Animal;
+import zoo.Keeper;
+import zoo.Manager;
+import zoo.Zoo;
+import zoo.Cage;
+import zoo.Employee;
+
+
+/**
+ * De, textbased, gebruikersinterface (!!OBSOLETE!!)
+ */
+<span class="nc bnc" id="L53" title="All 2 branches missed.">class CLI</span>
+{
+
+	// --------------------------------------------------------------------
+	// Dit programma kan snel gegevens inlezen uit een file
+	// en ze daar later ook weer in opbergen;
+	// - 'good.txt' bevat correcte informatie
+	// (maar misschien dat die niet correct verwerkt wordt)
+	// - 'bad.txt' bevat strijdige informatie
+	// (die de dierentuin nu nog ten onrechte accepteert)
+
+	// The names of the files to load/save
+<span class="nc" id="L65">	static final String[] files = {</span>
+			&quot;good.txt&quot;,			&quot;bad.txt&quot;,
+			&quot;good-extra.txt&quot;,	&quot;bad-extra.txt&quot;
+		};
+
+	// Welke gebruikt wordt kan je hier kiezen:
+<span class="nc" id="L71">	private static String de_savefile = files[0];	// good.txt</span>
+	// private static String de_savefile = files[1];	// bad.txt
+
+	// Afhankelijk van de eclipse versie en je werkomgeving
+	// moet er wel/niet een &quot;bin/&quot; prefix aan de naam van
+	// het bestand worden toegevoegd.
+
+	// Je kan de naam van de savefile ook via de programma
+	// argumentenlijst door laten geven.
+	// PS Er zijn ook nog twee &quot;reserve&quot; versies voor het geval dat je
+	// de originele per ongeluk met foute informatie overschrijft.
+
+	// The Main entry point
+	public static void main(String[] args) {
+
+//		/* PLEASE IGNORE THIS CODE */
+//		try {
+//			String current = new java.io.File(&quot;.&quot;).getCanonicalPath();
+//			System.out.println(&quot;Current dir:&quot; + current);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(&quot;Current dir using System:&quot; + System.getProperty(&quot;user.dir&quot;));
+//		/* END IGNORED CODE */
+
+		// Is er een SaveFile naam argument meegegeven ?
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (args.length &gt; 0)</span>
+<span class="nc" id="L98">			de_savefile = args[0];</span>
+<span class="nc" id="L99">		new CLI(&quot;Artis&quot;);</span>
+<span class="nc" id="L100">	}</span>
+
+	// Instance variables
+	Zoo dierentuin; // the zoo we manage
+
+	// -----------------------
+
+<span class="nc" id="L107">	private CLI(String naam) {</span>
+
+		// Staat java 'assert' wel aan ?
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (!java_assert_enabled)</span>
+<span class="nc" id="L111">			System.err.println(&quot;\n\t** WARNING: JAVA ASSERTS ARE NOT ENABLED **\n&quot;);</span>
+		else
+<span class="nc" id="L113">			System.out.println(&quot;OKE: java 'assert' is enabled\n&quot;);</span>
+
+		// Maak de dierentuin
+<span class="nc" id="L116">		dierentuin = new Zoo(naam);</span>
+<span class="nc" id="L117">		System.out.println(&quot;Welkom bij dierentuin &quot; + dierentuin.getName());</span>
+
+		// Aan het werk
+<span class="nc" id="L120">		boolean stoppen = false;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		while (!stoppen) {</span>
+			// Druk het keuzemenu af
+<span class="nc" id="L123">			System.out.println(&quot;\nKies een actie:&quot;);</span>
+			// begin
+<span class="nc" id="L125">			System.out.println(&quot;  1\tdierentuin laden&quot;);</span>
+			// dieren
+<span class="nc" id="L127">			System.out.println(&quot;  2\tdier toevoegen&quot;);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if (dierentuin.hasAnimals()) // AKK: 20140318 added</span>
+<span class="nc" id="L129">				System.out.println(&quot;  3\tdier verwijderen&quot;);</span>
+<span class="nc" id="L130">			System.out.println(&quot;  4\toverzicht dieren&quot;);</span>
+			// werknemers
+<span class="nc" id="L132">			System.out.println(&quot;  5\twerknemer toevoegen&quot;);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">			if (dierentuin.hasEmployees()) // AKK: 20140318 added</span>
+<span class="nc" id="L134">				System.out.println(&quot;  6\twerknemer verwijderen&quot;);</span>
+<span class="nc" id="L135">			System.out.println(&quot;  7\toverzicht werknemers&quot;);</span>
+<span class="nc" id="L136">			System.out.println(&quot;  8\tsalaris kosten&quot;);</span>
+			// tenslotte
+			// AKK: 20140318 test added
+<span class="nc bnc" id="L139" title="All 4 branches missed.">			if (dierentuin.hasAnimals() || dierentuin.hasEmployees())</span>
+<span class="nc" id="L140">				System.out.println(&quot;  9\tdierentuin opbergen&quot;);</span>
+<span class="nc" id="L141">			System.out.println(&quot;  0\tprogramma stoppen&quot;);</span>
+
+			// Vraag gebruiker om zijn keuze
+<span class="nc" id="L144">			int keuze = ReadInput.getInt(&quot;Uw keuze&quot;);</span>
+			
+			try {
+				// Acties uitvoeren
+<span class="nc bnc" id="L148" title="All 11 branches missed.">				switch (keuze)</span>
+				{
+				case 0:
+<span class="nc" id="L151">					stoppen = true;</span>
+<span class="nc" id="L152">					break;</span>
+				// begin acties
+				case 1:
+<span class="nc" id="L155">					loadFile();</span>
+<span class="nc" id="L156">					break;</span>
+				// dier acties
+				case 2:
+<span class="nc" id="L159">					dierToevoegen();</span>
+<span class="nc" id="L160">					break;</span>
+				case 3:
+<span class="nc bnc" id="L162" title="All 2 branches missed.">					if (dierentuin.hasAnimals()) // AKK: 20140318 added</span>
+<span class="nc" id="L163">						dierVerwijderen();</span>
+					else
+<span class="nc" id="L165">						System.err.println(&quot;actie 3 is nu niet geldig&quot;);</span>
+<span class="nc" id="L166">					break;</span>
+				case 4:
+<span class="nc" id="L168">					dierentuin.showAnimals();</span>
+<span class="nc" id="L169">					break;</span>
+				// werknemers
+				case 5:
+<span class="nc" id="L172">					werknemerToevoegen();</span>
+<span class="nc" id="L173">					break;</span>
+				case 6:
+<span class="nc bnc" id="L175" title="All 2 branches missed.">					if (dierentuin.hasEmployees()) // AKK: 20140318 added</span>
+<span class="nc" id="L176">						werknemerVerwijderen();</span>
+					else
+<span class="nc" id="L178">						System.err.println(&quot;actie 6 is nu niet geldig&quot;);</span>
+<span class="nc" id="L179">					break;</span>
+				case 7:
+<span class="nc" id="L181">					dierentuin.showEmployees();</span>
+<span class="nc" id="L182">					break;</span>
+				case 8:
+<span class="nc" id="L184">					dierentuin.showCosts();</span>
+<span class="nc" id="L185">					break;</span>
+				// tenslotte
+				case 9:
+					// AKK: 20140318 test added
+<span class="nc bnc" id="L189" title="All 4 branches missed.">					if (dierentuin.hasAnimals() || dierentuin.hasEmployees())</span>
+<span class="nc" id="L190">						saveFile();</span>
+					else
+<span class="nc" id="L192">						System.err.println(&quot;actie 9 is nu niet geldig&quot;);</span>
+<span class="nc" id="L193">					break;</span>
+				// en de rest
+				default:
+<span class="nc" id="L196">					System.err.println(&quot;Onjuiste keuze gemaakt&quot;);</span>
+					break;
+				} // end acties
+<span class="nc" id="L199">			} catch(Throwable e) {</span>
+				// Kies hier waar de foutmelding wel/niet naar toe gaat
+<span class="nc" id="L201">				printThrowable(e, System.out);</span>
+				//printThrowable(e, System.err);				
+<span class="nc" id="L203">			}</span>
+
+<span class="nc" id="L205">		} // end while</span>
+
+<span class="nc" id="L207">		System.out.println(&quot;Tot ziens!&quot;);</span>
+<span class="nc" id="L208">	}</span>
+	
+	// Internal function to print a partial stacktrace on some printstream
+	private void printThrowable(Throwable e, PrintStream dest) {
+<span class="nc" id="L212">		dest.println(&quot;------------&quot;);</span>
+<span class="nc" id="L213">		dest.println(e+&quot;?&quot;);</span>
+<span class="nc" id="L214">		StackTraceElement[] s = e.getStackTrace();</span>
+<span class="nc bnc" id="L215" title="All 4 branches missed.">		for (int i = 0; i &lt; 3 &amp;&amp; i &lt; s.length; ++i) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (i &gt; 0) dest.print(&quot;  called from &quot;);</span>
+<span class="nc" id="L217">			else dest.print(&quot;detected on &quot;);</span>
+<span class="nc" id="L218">			dest.println(s[i]);</span>
+		}
+<span class="nc bnc" id="L220" title="All 2 branches missed.">		if (s.length &gt; 3)</span>
+<span class="nc" id="L221">			dest.println(&quot;  called from ...&quot;);</span>
+<span class="nc" id="L222">		dest.println(&quot;------------\nProgram resumes ...&quot;);</span>
+<span class="nc" id="L223">	}</span>
+
+	// -------------------
+
+	public void dierToevoegen() {
+<span class="nc bnc" id="L228" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot add an animal to a null zoo&quot;;</span>
+<span class="nc" id="L229">		System.out.println(&quot;Geef de soort, de naam en de leeftijd van het dier op&quot;);</span>
+<span class="nc" id="L230">		String dierSoort = ReadInput.getString(&quot;soort&quot;);</span>
+<span class="nc" id="L231">		String dierNaam = ReadInput.getString(&quot;naam&quot;);</span>
+<span class="nc" id="L232">		int dierLeeftijd = ReadInput.getInt(&quot;leeftijd&quot;);</span>
+<span class="nc" id="L233">		dierentuin.addAnimal(new Animal(dierNaam, dierSoort, dierLeeftijd));</span>
+<span class="nc" id="L234">	} // dierToevoegen</span>
+
+	public void dierVerwijderen() {
+<span class="nc bnc" id="L237" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot remove an animal from a null zoo&quot;;</span>
+<span class="nc" id="L238">		System.out.println(&quot;Geef de soort en de naam van het dier op&quot;);</span>
+<span class="nc" id="L239">		String dierSoort = ReadInput.getString(&quot;soort&quot;);</span>
+<span class="nc" id="L240">		String dierNaam = ReadInput.getString(&quot;naam&quot;);</span>
+<span class="nc" id="L241">		dierentuin.removeAnimal(dierSoort, dierNaam);</span>
+<span class="nc" id="L242">	} // dierVerwijderen</span>
+
+	// -------------------
+
+	public void werknemerToevoegen() {
+<span class="nc bnc" id="L247" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot add an employee to a null zoo&quot;;</span>
+		// Wat voor soort werknemer moet het worden ?
+<span class="nc" id="L249">		System.out.println(&quot;Geef de categorie op [1=manager,2=boekhouder,4=oppasser]&quot;);</span>
+<span class="nc" id="L250">		int werknemerSoort = ReadInput.getInt(&quot;categorie&quot;);</span>
+		// Verdere werknemer gegevens opvragen
+<span class="nc" id="L252">		System.out.println(&quot;Geef het nummer, de naam en de leeftijd van de werknemer op&quot;);</span>
+<span class="nc" id="L253">		int werknemerNummer = ReadInput.getInt(&quot;nummer&quot;);</span>
+<span class="nc" id="L254">		String werknemerNaam = ReadInput.getString(&quot;naam&quot;);</span>
+<span class="nc" id="L255">		int werknemerLeeftijd = ReadInput.getInt(&quot;leeftijd&quot;);</span>
+		// Maak de goede soort werknemer
+<span class="nc" id="L257">		Employee werknemer = null;</span>
+<span class="nc bnc" id="L258" title="All 4 branches missed.">		switch (werknemerSoort)</span>
+		{
+		case 1: // Manager
+<span class="nc" id="L261">			werknemer = new Manager(werknemerNummer, werknemerNaam, werknemerLeeftijd);</span>
+//			werknemer = new Employee(Employee.MANAGER, werknemerNummer, werknemerNaam, werknemerLeeftijd);
+<span class="nc" id="L263">			break;</span>
+		case 2: // Boekhouder
+<span class="nc" id="L265">			werknemer = new Administrator(werknemerNummer, werknemerNaam, werknemerLeeftijd);</span>
+//			werknemer = new Employee(Employee.ADMINISTRATOR, werknemerNummer, werknemerNaam, werknemerLeeftijd);
+<span class="nc" id="L267">			koppelAanManager(werknemer);</span>
+<span class="nc" id="L268">			break;</span>
+		case 4: // Oppasser
+			// aanvullende informatie vragen
+<span class="nc" id="L271">			String dierSoort = ReadInput.getString(&quot;welke diersoort&quot;);</span>
+<span class="nc" id="L272">			Cage kooi = dierentuin.findCage(dierSoort);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">			if (kooi == null)</span>
+<span class="nc" id="L274">				kooi = dierentuin.makeCage(dierSoort);</span>
+<span class="nc" id="L275">			werknemer = new Keeper(werknemerNummer, werknemerNaam, werknemerLeeftijd, kooi);</span>
+//			werknemer = new Employee(Employee.ZOOKEEPER, werknemerNummer, werknemerNaam, werknemerLeeftijd);
+//			werknemer.setCage(kooi);
+<span class="nc" id="L278">			koppelAanManager(werknemer);</span>
+			break;
+		}
+<span class="nc" id="L281">		dierentuin.addEmployee(werknemerNummer, werknemer);</span>
+<span class="nc" id="L282">	} // werknemerToevoegen</span>
+
+	// intern hulpje
+	private void koppelAanManager(Employee werknemer) {
+<span class="nc bnc" id="L286" title="All 4 branches missed.">		assert dierentuin != null : &quot;Trying to attach an employee to a manager in a null zoo&quot;;</span>
+<span class="nc bnc" id="L287" title="All 4 branches missed.">		assert werknemer != null : &quot;Cannot attach a null employee to a manager&quot;;</span>
+<span class="nc" id="L288">		System.out.println(&quot;Bij welke manager werkt hij?&quot;);</span>
+<span class="nc" id="L289">		dierentuin.showManagers();</span>
+<span class="nc" id="L290">		int managerNummer = ReadInput.getInt(&quot;manager nummer&quot;);</span>
+<span class="nc" id="L291">		dierentuin.assignManager(managerNummer, werknemer);</span>
+<span class="nc" id="L292">	} // koppelAanManager</span>
+
+	public void werknemerVerwijderen() {
+<span class="nc bnc" id="L295" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot remove an employee from a null zoo&quot;;</span>
+<span class="nc" id="L296">		int werknemerNummer = ReadInput.getInt(&quot;nummer&quot;);</span>
+<span class="nc" id="L297">		dierentuin.removeEmployee(werknemerNummer);</span>
+<span class="nc" id="L298">	} // werknemerVerwijderen</span>
+
+	// ======================================================
+	// De code hieronder kan een complete dierentuin opbergen
+	// of weer inlezen van een file.
+	// Dan hoef je tijdens het testen niet steeds alles opnieuw
+	// in te voeren.
+
+	// Save all data to a file.
+	public void saveFile() {
+<span class="nc bnc" id="L308" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot save a null zoo&quot;;</span>
+		try {
+<span class="nc" id="L310">			PrintWriter out = new PrintWriter(new FileWriter(de_savefile));</span>
+<span class="nc" id="L311">			System.out.println(&quot;Saving to &quot; + de_savefile);</span>
+<span class="nc" id="L312">			dierentuin.saveFile(out);</span>
+<span class="nc" id="L313">			out.println(&quot;0&quot;);</span>
+<span class="nc" id="L314">			out.close();</span>
+<span class="nc" id="L315">		} catch (java.io.IOException ioe) {</span>
+<span class="nc" id="L316">			System.err.println(&quot;Oeps, kan &quot; + de_savefile + &quot; niet maken&quot;);</span>
+<span class="nc" id="L317">		}</span>
+<span class="nc" id="L318">	} // saveFile</span>
+
+	// Load saved data from a file.
+	// Het eerste getal op een regel vertelt de actie.
+	// De codes zijn net zoals in het menu hierboven:
+	// 1=dier toevoegen, 2=werknemer toevoegen, 0=klaar.
+	public void loadFile() {
+<span class="nc bnc" id="L325" title="All 4 branches missed.">		assert dierentuin != null : &quot;Cannot load to a null zoo&quot;;</span>
+		try {
+<span class="nc" id="L327">			Scanner scanner = new Scanner(new File(de_savefile));</span>
+<span class="nc" id="L328">			Pattern alfanum = Pattern.compile(&quot;\\w+&quot;); // m.a.w. een &quot;woord&quot;</span>
+
+<span class="nc" id="L330">			System.out.println(&quot;Loading from &quot; + de_savefile);</span>
+
+<span class="nc" id="L332">			int dieren = 0, werknemers = 0;</span>
+
+			// Zolang er nog iets te lezen valt
+<span class="nc bnc" id="L335" title="All 2 branches missed.">			while (scanner.hasNextLine()) {</span>
+
+				// Lees de actie code in
+<span class="nc" id="L338">				int actie = scanner.nextInt();</span>
+<span class="nc bnc" id="L339" title="All 4 branches missed.">				switch (actie)</span>
+				{
+
+				case 0: // Klaar
+<span class="nc" id="L343">					scanner.close();</span>
+<span class="nc" id="L344">					System.out.println(dieren + &quot; dieren en &quot; + werknemers + &quot; werknemers ingelezen&quot;);</span>
+<span class="nc" id="L345">					return;</span>
+
+				case 1: { // Dier toevoegen
+					// lees dier gegevens in
+<span class="nc" id="L349">					String soort = scanner.next(alfanum);</span>
+<span class="nc" id="L350">					String naam = scanner.next(alfanum);</span>
+<span class="nc" id="L351">					int leeftijd = scanner.nextInt();</span>
+<span class="nc" id="L352">					dierentuin.addAnimal(new Animal(soort, naam, leeftijd));</span>
+<span class="nc" id="L353">					++dieren;</span>
+				}
+<span class="nc" id="L355">					break; // dier toevoegen</span>
+
+				case 2: { // Medewerker toevoegen
+					// lees medewerker gegevens in
+<span class="nc" id="L359">					int categorie = scanner.nextInt();</span>
+<span class="nc" id="L360">					int nummer = scanner.nextInt();</span>
+<span class="nc" id="L361">					String naam = scanner.next(alfanum);</span>
+<span class="nc" id="L362">					int leeftijd = scanner.nextInt();</span>
+<span class="nc" id="L363">					Employee werknemer = null;</span>
+<span class="nc bnc" id="L364" title="All 4 branches missed.">					switch (categorie)</span>
+					{
+
+					case 1: { // Manager maken
+<span class="nc" id="L368">						werknemer = new Manager(nummer, naam, leeftijd);</span>
+//						werknemer = new Employee(Employee.MANAGER, nummer, naam, leeftijd);
+						}
+<span class="nc" id="L371">						break;</span>
+
+					case 2: { // Boekhouder maken
+<span class="nc" id="L374">						werknemer = new Administrator(nummer, naam, leeftijd);</span>
+//						werknemer = new Employee(Employee.ADMINISTRATOR, nummer, naam, leeftijd);
+						// lees nummer van zijn baas in
+<span class="nc" id="L377">						int baas = scanner.nextInt();</span>
+<span class="nc" id="L378">						dierentuin.assignManager(baas, werknemer);</span>
+						}
+<span class="nc" id="L380">						break;</span>
+
+					case 4: { // Oppasser maken
+						// lees de diersoort in van zijn kooi
+<span class="nc" id="L384">						String soort = scanner.next(alfanum);</span>
+<span class="nc" id="L385">						Cage kooi = dierentuin.findCage(soort);</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">						if (kooi == null) kooi = dierentuin.makeCage(soort);</span>
+<span class="nc" id="L387">						werknemer = new Keeper(nummer, naam, leeftijd, kooi);</span>
+//						werknemer = new Employee(Employee.ZOOKEEPER, nummer, naam, leeftijd);
+//						werknemer.setCage(kooi);
+						// lees nummer van zijn baas in
+<span class="nc" id="L391">						int baas = scanner.nextInt();</span>
+<span class="nc" id="L392">						dierentuin.assignManager(baas, werknemer);</span>
+						}
+<span class="nc" id="L394">						break;</span>
+
+					default: // niet bestaande werknemer code
+<span class="nc" id="L397">						System.err.println(&quot;Bogus categorie &quot; + categorie + &quot; gevonden!&quot;);</span>
+<span class="nc" id="L398">						scanner.close();</span>
+<span class="nc" id="L399">						return;</span>
+
+					} // categorie
+<span class="nc" id="L402">					dierentuin.addEmployee(nummer, werknemer);</span>
+<span class="nc" id="L403">					++werknemers;</span>
+				}
+<span class="nc" id="L405">					break; // medewerker toevoegen</span>
+
+				default: // niet bestaande actie code gevonden
+<span class="nc" id="L408">					System.err.println(&quot;Bogus actie &quot; + actie + &quot; gevonden!&quot;);</span>
+<span class="nc" id="L409">					scanner.close();</span>
+<span class="nc" id="L410">					return;</span>
+
+				} // acties
+<span class="nc" id="L413">			} // while input</span>
+<span class="nc" id="L414">			scanner.close();</span>
+<span class="nc" id="L415">			System.err.println(&quot;Unexpected EOF!&quot;);</span>
+<span class="nc" id="L416">		} catch (java.io.FileNotFoundException fnfe) {</span>
+<span class="nc" id="L417">			System.err.println(&quot;File &quot; + de_savefile + &quot; niet gevonden&quot;);</span>
+<span class="nc" id="L418">		} catch (java.util.NoSuchElementException nsee) {</span>
+<span class="nc" id="L419">			System.err.println(&quot;Foute invoer gevonden&quot;);</span>
+<span class="nc" id="L420">		}</span>
+<span class="nc" id="L421">	} // loadFile</span>
+
+	// ==========================================
+	// Code to check the 'asserts-enabled' status
+<span class="nc" id="L425">	public static boolean java_assert_enabled = false;</span>
+	static {
+<span class="nc bnc" id="L427" title="All 4 branches missed.">		assert java_assert_enabled = true; // mis-using a side-effect here !</span>
+<span class="nc" id="L428">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

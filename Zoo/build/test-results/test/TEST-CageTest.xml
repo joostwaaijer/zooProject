@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="CageTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2018-06-27T13:16:50" hostname="Laptops-MacBook-Pro.local" time="0.003">
+  <properties/>
+  <testcase name="testAddAnimalNull" classname="CageTest" time="0.0"/>
+  <testcase name="testHasAnimalNull" classname="CageTest" time="0.0"/>
+  <testcase name="testCage" classname="CageTest" time="0.0"/>
+  <testcase name="testGetAnimalEmpty" classname="CageTest" time="0.0"/>
+  <testcase name="testCageEmpty" classname="CageTest" time="0.0"/>
+  <testcase name="testHasAnimalEmpty" classname="CageTest" time="0.0"/>
+  <testcase name="testRemoveAnimalNull" classname="CageTest" time="0.0"/>
+  <testcase name="testCageNull" classname="CageTest" time="0.0"/>
+  <testcase name="testRemoveAnimalEmpty" classname="CageTest" time="0.0"/>
+  <testcase name="testDoAnimals" classname="CageTest" time="0.0"/>
+  <testcase name="testGetAnimalNull" classname="CageTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

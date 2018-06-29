@@ -1,0 +1,751 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>FindBugs Report</title>
+        <style type="text/css">
+		.tablerow0 {
+			background: #EEEEEE;
+		}
+
+		.tablerow1 {
+			background: white;
+		}
+
+		.detailrow0 {
+			background: #EEEEEE;
+		}
+
+		.detailrow1 {
+			background: white;
+		}
+
+		.tableheader {
+			background: #b9b9fe;
+			font-size: larger;
+		}
+
+		.tablerow0:hover, .tablerow1:hover {
+			background: #aaffaa;
+		}
+
+		.priority-1 {
+		    color: red;
+		    font-weight: bold;
+		}
+		.priority-2 {
+		    color: orange;
+		    font-weight: bold;
+		}
+		.priority-3 {
+		    color: green;
+		    font-weight: bold;
+		}
+		.priority-4 {
+		    color: blue;
+		    font-weight: bold;
+		}
+		</style>
+        <script type="text/javascript">
+			function toggleRow(elid) {
+				if (document.getElementById) {
+					element = document.getElementById(elid);
+					if (element) {
+						if (element.style.display == 'none') {
+							element.style.display = 'block';
+							//window.status = 'Toggle on!';
+						} else {
+							element.style.display = 'none';
+							//window.status = 'Toggle off!';
+						}
+					}
+				}
+			}
+		</script>
+    </head>
+    <body>
+        <h1>
+            <a href="http://findbugs.sourceforge.net">FindBugs</a>
+             Report
+        </h1>
+        <h2>Project Information</h2>
+        <p>Project: 
+		</p>
+        <p>FindBugs version: 3.0.1</p>
+        <p>Code analyzed:</p>
+        <ul>
+            <li>/Users/nerds/Downloads/Zoo/build/classes/java/main</li>
+        </ul>
+        <p>
+            <br />
+            <br />
+        </p>
+        <h2>Metrics</h2>
+        <p>1407 lines of code analyzed,
+	in 24 classes, 
+	in 4 packages.</p>
+        <table width="500" cellpadding="5" cellspacing="2">
+            <tr class="tableheader">
+                <th align="left">Metric</th>
+                <th align="right">Total</th>
+                <th align="right">Density*</th>
+            </tr>
+            <tr class="tablerow0">
+                <td>High Priority Warnings</td>
+                <td align="right">17</td>
+                <td align="right">12.08</td>
+            </tr>
+            <tr class="tablerow1">
+                <td>Medium Priority Warnings</td>
+                <td align="right">4</td>
+                <td align="right">2.84</td>
+            </tr>
+            <tr class="$totalClass">
+                <td>
+                    <b>Total Warnings</b>
+                </td>
+                <td align="right">
+                    <b>21</b>
+                </td>
+                <td align="right">
+                    <b>14.93</b>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <i>(* Defects per Thousand lines of non-commenting source statements)</i>
+        </p>
+        <p>
+            <br />
+            <br />
+        </p>
+        <h2>Contents</h2>
+        <ul>
+            <li>
+                <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+            </li>
+            <li>
+                <a href="#Warnings_I18N">Internationalization Warnings</a>
+            </li>
+            <li>
+                <a href="#Warnings_STYLE">Dodgy code Warnings</a>
+            </li>
+            <li>
+                <a href="#Details">Details</a>
+            </li>
+        </ul>
+        <h1>Summary</h1>
+        <table width="500" cellpadding="5" cellspacing="2">
+            <tr class="tableheader">
+                <th align="left">Warning Type</th>
+                <th align="right">Number</th>
+            </tr>
+            <tr class="tablerow0">
+                <td>
+                    <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+                </td>
+                <td align="right">10</td>
+            </tr>
+            <tr class="tablerow1">
+                <td>
+                    <a href="#Warnings_I18N">Internationalization Warnings</a>
+                </td>
+                <td align="right">7</td>
+            </tr>
+            <tr class="tablerow0">
+                <td>
+                    <a href="#Warnings_STYLE">Dodgy code Warnings</a>
+                </td>
+                <td align="right">4</td>
+            </tr>
+            <tr class="tablerow1">
+                <td>
+                    <b>Total</b>
+                </td>
+                <td align="right">
+                    <b>21</b>
+                </td>
+            </tr>
+        </table>
+        <h1>Warnings</h1>
+        <p>Click on a warning row to see full context information.</p>
+        <h2>
+            <a name="Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+        </h2>
+        <table class="warningtable" width="100%" cellspacing="0">
+            <tr class="tableheader">
+                <th align="left">Code</th>
+                <th align="left">Warning</th>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N65960');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N65960" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "add animal"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 214]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66038');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66038" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "add employee"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 220]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66116');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66116" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "load zoo"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 212]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66194');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66194" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "new zoo"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 210]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66272');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66272" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "remove animal"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 216]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66350');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66350" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "remove employee"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 222]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66428');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66428" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "save zoo"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 228]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66506');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66506" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "show animals"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 218]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66584');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66584" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "show costs"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 226]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66662');">
+                <td>
+                    <span class="priority-1">ES</span>
+                </td>
+                <td>Comparison of String parameter using == or != in GUI.handleUseCase(String) </td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66662" style="display: none;">
+                        <a href="#ES_COMPARING_PARAMETER_STRING_WITH_EQ">Bug type ES_COMPARING_PARAMETER_STRING_WITH_EQ (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.handleUseCase(String)
+                        <br />
+                        Actual type String
+                        <br />
+                        String constant "show employees"
+                        <br />
+                        Value loaded from useCaseName
+                        <br />
+                        At GUI.java:[line 224]
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h2>
+            <a name="Warnings_I18N">Internationalization Warnings</a>
+        </h2>
+        <table class="warningtable" width="100%" cellspacing="0">
+            <tr class="tableheader">
+                <th align="left">Code</th>
+                <th align="left">Warning</th>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N65592');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in CLI.loadFile(): new java.util.Scanner(File)</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N65592" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class CLI
+                        <br />
+                        In method CLI.loadFile()
+                        <br />
+                        Called method new java.util.Scanner(File)
+                        <br />
+                        At CLI.java:[line 327]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N65655');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in CLI.saveFile(): new java.io.FileWriter(String)</td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N65655" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class CLI
+                        <br />
+                        In method CLI.saveFile()
+                        <br />
+                        Called method new java.io.FileWriter(String)
+                        <br />
+                        At CLI.java:[line 310]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N65771');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in new GUI(String): new java.io.PrintStream(OutputStream)</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N65771" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method new GUI(String)
+                        <br />
+                        Called method new java.io.PrintStream(OutputStream)
+                        <br />
+                        At GUI.java:[line 155]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N65834');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in GUI.loadFile(): new java.util.Scanner(File)</td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N65834" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.loadFile()
+                        <br />
+                        Called method new java.util.Scanner(File)
+                        <br />
+                        At GUI.java:[line 449]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N65897');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in GUI.saveFile(): new java.io.FileWriter(String)</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N65897" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.saveFile()
+                        <br />
+                        Called method new java.io.FileWriter(String)
+                        <br />
+                        At GUI.java:[line 563]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66793');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in gui.Reporter.getPrintStream(): new java.io.PrintStream(OutputStream)</td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66793" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class gui.Reporter
+                        <br />
+                        In method gui.Reporter.getPrintStream()
+                        <br />
+                        Called method new java.io.PrintStream(OutputStream)
+                        <br />
+                        At Reporter.java:[line 172]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66990');">
+                <td>
+                    <span class="priority-1">Dm</span>
+                </td>
+                <td>Found reliance on default encoding in util.ReadInput.getString(String): new java.io.InputStreamReader(InputStream)</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66990" style="display: none;">
+                        <a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+                        <br />
+                        In class util.ReadInput
+                        <br />
+                        In method util.ReadInput.getString(String)
+                        <br />
+                        Called method new java.io.InputStreamReader(InputStream)
+                        <br />
+                        At ReadInput.java:[line 29]
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h2>
+            <a name="Warnings_STYLE">Dodgy code Warnings</a>
+        </h2>
+        <table class="warningtable" width="100%" cellspacing="0">
+            <tr class="tableheader">
+                <th align="left">Code</th>
+                <th align="left">Warning</th>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66923');">
+                <td>
+                    <span class="priority-2">DLS</span>
+                </td>
+                <td>Dead store to e in util.ArrayEnumerationFactory.main(String[])</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66923" style="display: none;">
+                        <a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+                        <br />
+                        In class util.ArrayEnumerationFactory
+                        <br />
+                        In method util.ArrayEnumerationFactory.main(String[])
+                        <br />
+                        Local variable named e
+                        <br />
+                        At ArrayEnumerationFactory.java:[line 51]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N65718');">
+                <td>
+                    <span class="priority-2">SF</span>
+                </td>
+                <td>Switch statement found in CLI.werknemerToevoegen() where default case is missing</td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N65718" style="display: none;">
+                        <a href="#SF_SWITCH_NO_DEFAULT">Bug type SF_SWITCH_NO_DEFAULT (click for details)</a>
+                        <br />
+                        In class CLI
+                        <br />
+                        In method CLI.werknemerToevoegen()
+                        <br />
+                        At CLI.java:[lines 258-278]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow1" onclick="toggleRow('N66740');">
+                <td>
+                    <span class="priority-2">SF</span>
+                </td>
+                <td>Switch statement found in GUI.addEmployee() where default case is missing</td>
+            </tr>
+            <tr class="detailrow1">
+                <td />
+                <td>
+                    <p id="N66740" style="display: none;">
+                        <a href="#SF_SWITCH_NO_DEFAULT">Bug type SF_SWITCH_NO_DEFAULT (click for details)</a>
+                        <br />
+                        In class GUI
+                        <br />
+                        In method GUI.addEmployee()
+                        <br />
+                        At GUI.java:[lines 351-374]
+                    </p>
+                </td>
+            </tr>
+            <tr class="tablerow0" onclick="toggleRow('N66856');">
+                <td>
+                    <span class="priority-2">ST</span>
+                </td>
+                <td>Write to static field gui.Reporter.counter from instance method new gui.Reporter(String, int, int)</td>
+            </tr>
+            <tr class="detailrow0">
+                <td />
+                <td>
+                    <p id="N66856" style="display: none;">
+                        <a href="#ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">Bug type ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD (click for details)</a>
+                        <br />
+                        In class gui.Reporter
+                        <br />
+                        In method new gui.Reporter(String, int, int)
+                        <br />
+                        Field gui.Reporter.counter
+                        <br />
+                        At Reporter.java:[line 86]
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h1>
+            <a name="Details">Details</a>
+        </h1>
+        <h2>
+            <a name="DLS_DEAD_LOCAL_STORE">DLS_DEAD_LOCAL_STORE: Dead store to local variable</a>
+        </h2>
+        <p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    
+        <h2>
+            <a name="DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING: Reliance on default encoding</a>
+        </h2>
+        <p> Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume that the default platform encoding is suitable. This will cause the application behaviour to vary between platforms. Use an alternative API and specify a charset name or Charset object explicitly.  </p>
+
+      
+        <h2>
+            <a name="ES_COMPARING_PARAMETER_STRING_WITH_EQ">ES_COMPARING_PARAMETER_STRING_WITH_EQ: Comparison of String parameter using == or !=</a>
+        </h2>
+          <p>This code compares a <code>java.lang.String</code> parameter for reference
+equality using the == or != operators. Requiring callers to
+pass only String constants or interned strings to a method is unnecessarily
+fragile, and rarely leads to measurable performance gains. Consider
+using the <code>equals(Object)</code> method instead.</p>
+
+    
+        <h2>
+            <a name="SF_SWITCH_NO_DEFAULT">SF_SWITCH_NO_DEFAULT: Switch statement found where default case is missing</a>
+        </h2>
+          <p> This method contains a switch statement where default case is missing.
+  Usually you need to provide a default case.</p>
+  <p>Because the analysis only looks at the generated bytecode, this warning can be incorrect triggered if
+the default case is at the end of the switch statement and the switch statement doesn't contain break statements for other
+cases.
+
+    
+        <h2>
+            <a name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD: Write to static field from instance method</a>
+        </h2>
+          <p> This instance method writes to a static field. This is tricky to get
+correct if multiple instances are being manipulated,
+and generally bad practice.
+</p>
+
+    
+    </body>
+</html>

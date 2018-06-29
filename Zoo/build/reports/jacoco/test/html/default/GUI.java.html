@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GUI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">GUI.java</span></div><h1>GUI.java</h1><pre class="source lang-java linenums">// ===============================================================
+//			THERE IS NO NEED TO CHANGE THIS FILE
+//		  UNLESS YOU ADD OR REMOVE EXISTING CLASSES
+//		   WHICH SHOULD NOT HAPPEN BEFORE PART 3
+//		             OF YOUR ASSIGNMENT
+// ===============================================================
+//
+// Change  3.1:
+// AKK 20160325 - removed redundant &quot;validInput&quot; code
+// AKK 20160323 - added &quot;new zoo&quot; usecase
+// AKK 20160310 - translated to english
+// Change  2.1:
+// AKK 20150618 - removed lots of safeguard code
+// Change  1.4.4:
+// AKK 20150602 - removed various use-case limitations
+// Changes 1.4.3:
+// AKK 20141110 - oops, was comparing some strings with ==
+// Changes 1.4.2:
+// AKK 20140317 - initialy disable &quot;save zoo&quot; use-case
+// Changes 1.4.1:
+// AKK 20130528 - load/save file got a dialog to select the file.
+// AKK 20130516 - bug! werknemerToevoegen created a dummy employee when
+//					the question dialog was cancelled.
+// AKK 20130516 - removed 'werknemerCategorie' + code, because we can
+//					now ask for the index of the selected item.
+// AKK 20130515 - moved the 'assert check' message to the reporter window.
+// AKK 20130515 - removed redundant 'dierentuin' parameter from the methods.
+// AKK 20130515 - aligned the reporter window with the usecase menu.
+// AKK 20130405 - removed the AssertionError try/catch code
+//					(it is better to fail fast).
+// AKK 20130404 - a GUI class added using the UseCaseSet package.
+// Changes 1.3.4:
+// AKK 20130309 - the scanner was never closed.
+// AKK 20130309 - removed the ansi-escape strings.
+// AKK 20120403 - AssertionError try/catch added.
+// Changes 1.3.2:
+// AKK 20120322 - eclipse cannot handle the ansi-escapes in the c_* strings
+//					reduced them to empty strings
+// AKK 20120322 - eclipse does not handle the ansi-escapes in the asserts
+//					check strings
+// AKK 20120322 - eclipse executes the program in the wrong directory,
+//					adjusted the built-in save_file names.
+// AKK 20120322 - when catching an IOException, saveFile() would always
+//					complain about 'dierentuin.txt' rather than about
+//					the current save_file.
+// AKK 20120322 - added example asserts to the internal methods.
+
+// For load/save zoo
+import java.awt.Color;
+import java.io.File;
+import java.io.FileWriter;
+//import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import gui.Messenger;
+import gui.Questioner;
+import gui.Reporter;
+import gui.UseCaseHandler;
+import gui.UseCaseSet;
+import zoo.Administrator;
+import zoo.Animal;
+import zoo.Keeper;
+import zoo.Manager;
+import zoo.Zoo;
+import zoo.Cage;
+import zoo.Employee;
+
+
+/**
+ * A simple graphical user-interface.
+ * 
+ * @author R.Akkersdijk
+ */
+<span class="nc bnc" id="L77" title="All 2 branches missed.">class GUI implements UseCaseHandler</span>
+{
+
+	// ======================================================================
+	//
+	// This is the GUI for the Zoo program.
+	// Output sent to System.out will be diverted to a graphical window.
+	// Output sent to System.err will go to your IDE or terminal.
+	//
+	// This program can load zoo-data from a file
+	// and later store it again. This saves you some
+	// typeing during the excercises.
+	// - good.txt contains valid information
+	//		but maybe the program will not handle it properly
+	// - bad.txt contains bogus information
+	//		but maybe the program will accept it anyhow
+	// In case you accidentaly overwrite one of them
+	// two extra copies: good-spare.txt and bad-spare.txt
+	// are also provided.
+
+	// The load/save methods at the end allow you to select
+	// the version wanted.
+	//
+	// NOTE: Depending on your IDE and your OS settings, you
+	// 	may have to add/remove a '../' prefix to the filenames.
+	//
+	// ======================================================================
+
+	// The names of the files to load/save
+<span class="nc" id="L106">	static final String[] files = {</span>
+			&quot;good.txt&quot;,			&quot;bad.txt&quot;,
+			&quot;good-spare.txt&quot;,	&quot;bad-spare.txt&quot;
+		};
+
+
+	// The Main entry point
+	public static void main(String[] args) {
+
+//		/* PLEASE IGNORE THIS CODE */
+//		try {
+//			String current = new java.io.File(&quot;.&quot;).getCanonicalPath();
+//			System.out.println(&quot;Current dir:&quot; + current);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(&quot;Current dir using System:&quot; + System.getProperty(&quot;user.dir&quot;));
+//		/* END IGNORED CODE */
+
+<span class="nc" id="L125">		new GUI(&quot;Drienerlo&quot;); // launch the gui</span>
+<span class="nc" id="L126">	}</span>
+
+	// The instance variables
+	private Reporter reporter; // the window for System.out
+	private UseCaseSet useCaseSet; // the use-cases menu
+	private Zoo zoo; // the zoo being handled
+
+	// -----------------------
+	// The list of use case names, so we can compare
+	// objects rather than strings later.
+	static final String ucnNewZoo = &quot;new zoo&quot;;
+	static final String ucnLoadZoo = &quot;load zoo&quot;;
+	static final String ucnSaveZoo = &quot;save zoo&quot;;
+	static final String ucnAddAnimal = &quot;add animal&quot;;
+	static final String ucnRemoveAnimal = &quot;remove animal&quot;;
+	static final String ucnShowAnimals = &quot;show animals&quot;;
+	static final String ucnAddEmployee = &quot;add employee&quot;;
+	static final String ucnRemoveEmployee = &quot;remove employee&quot;;
+	static final String ucnShowEmployees = &quot;show employees&quot;;
+	static final String ucnShowCosts = &quot;show costs&quot;;
+	
+
+<span class="nc" id="L148">	private GUI(String name) {</span>
+		// Create an output window ...
+<span class="nc" id="L150">		reporter = new Reporter(name + &quot; output&quot;, 24, 90);</span>
+		// ... next to the use-case menu
+<span class="nc" id="L152">		reporter.setLocation(230, 30);</span>
+
+		// Send System.out to that output window
+<span class="nc" id="L155">		System.setOut(new PrintStream(reporter.getOutputStream()));</span>
+
+		// Has java assert been enabled ?
+		// Note: err goes to the IDE, out goes to the window
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		if (!java_assert_enabled) {</span>
+<span class="nc" id="L160">			System.err.println(&quot;\n\t** WARNING: JAVA ASSERTS ARE NOT ENABLED **\n&quot;);</span>
+<span class="nc" id="L161">			reporter.setForeground(Color.RED.darker());</span>
+<span class="nc" id="L162">			System.out.println(&quot;\n\t** WARNING: JAVA ASSERTS ARE NOT ENABLED **\n&quot;);</span>
+		} else {
+<span class="nc" id="L164">			System.err.println(&quot;OKE: java 'assert' is enabled\n&quot;);</span>
+<span class="nc" id="L165">			reporter.setForeground(Color.GREEN.darker().darker().darker());</span>
+<span class="nc" id="L166">			System.out.println(&quot;OKE: java 'assert' is enabled\n&quot;);</span>
+		}
+
+		// Create the zoo instance
+<span class="nc" id="L170">		zoo = new Zoo(name);</span>
+<span class="nc" id="L171">		System.out.println(&quot;Welcome to the &quot; + zoo.getName() + &quot;zoo&quot;);</span>
+
+		// Define the set of use cases
+<span class="nc" id="L174">		useCaseSet = new UseCaseSet(name + &quot; menu&quot;, this);</span>
+		{
+<span class="nc" id="L176">			useCaseSet.addUseCase(ucnNewZoo);</span>
+<span class="nc" id="L177">			useCaseSet.addUseCase(ucnLoadZoo);</span>
+
+<span class="nc" id="L179">			useCaseSet.addUseCase(ucnAddAnimal);</span>
+<span class="nc" id="L180">			useCaseSet.addUseCase(ucnRemoveAnimal);</span>
+			{
+<span class="nc" id="L182">				useCaseSet.disableUseCase(ucnRemoveAnimal);</span>
+			}
+<span class="nc" id="L184">			useCaseSet.addUseCase(ucnShowAnimals);</span>
+
+<span class="nc" id="L186">			useCaseSet.addUseCase(ucnAddEmployee);</span>
+<span class="nc" id="L187">			useCaseSet.addUseCase(ucnRemoveEmployee);</span>
+			{
+<span class="nc" id="L189">				useCaseSet.disableUseCase(ucnRemoveEmployee);</span>
+			}
+<span class="nc" id="L191">			useCaseSet.addUseCase(ucnShowEmployees);</span>
+<span class="nc" id="L192">			useCaseSet.addUseCase(ucnShowCosts);</span>
+
+<span class="nc" id="L194">			useCaseSet.addUseCase(ucnSaveZoo);</span>
+			{
+<span class="nc" id="L196">				useCaseSet.disableUseCase(ucnSaveZoo);</span>
+			}
+		}
+		// ... now show the menu
+<span class="nc" id="L200">		useCaseSet.setVisible(true);</span>
+<span class="nc" id="L201">	}</span>
+
+	@Override
+	// The use-case menu callback handler
+	public void handleUseCase(String useCaseName) {
+		try {
+			// Just in case the user has dismissed the output window
+<span class="nc" id="L208">			reporter.setVisible(true);</span>
+
+<span class="nc bnc" id="L210" title="All 2 branches missed.">			if (useCaseName == ucnNewZoo)</span>
+<span class="nc" id="L211">				newZoo();</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">			else if (useCaseName == ucnLoadZoo)</span>
+<span class="nc" id="L213">				loadFile();</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">			else if (useCaseName == ucnAddAnimal)</span>
+<span class="nc" id="L215">				addAnimal();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			else if (useCaseName== ucnRemoveAnimal)</span>
+<span class="nc" id="L217">				removeAnimal();</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">			else if (useCaseName == ucnShowAnimals)</span>
+<span class="nc" id="L219">				zoo.showAnimals();</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">			else if (useCaseName == ucnAddEmployee)</span>
+<span class="nc" id="L221">				addEmployee();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">			else if (useCaseName == ucnRemoveEmployee)</span>
+<span class="nc" id="L223">				removeEmployee();</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">			else if (useCaseName == ucnShowEmployees)</span>
+<span class="nc" id="L225">				zoo.showEmployees();</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			else if (useCaseName == ucnShowCosts)</span>
+<span class="nc" id="L227">				zoo.showCosts();</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">			else if (useCaseName == ucnSaveZoo)</span>
+<span class="nc" id="L229">				saveFile();</span>
+			else
+				// oops, forgot a usecase!
+<span class="nc bnc" id="L232" title="All 2 branches missed.">				assert false : &quot;NOT REACHED&quot;;</span>
+<span class="nc" id="L233">		} catch (Throwable e) {</span>
+			// Select where the error message will appear (or not)
+<span class="nc" id="L235">			printThrowable(e, System.err);	// ide output stream</span>
+<span class="nc" id="L236">			printThrowable(e, System.out);	// gui output window</span>
+<span class="nc" id="L237">		}</span>
+<span class="nc" id="L238">	}</span>
+
+	// Internal function to print a partial stacktrace on a printstream
+	private void printThrowable(Throwable e, PrintStream dest) {
+<span class="nc" id="L242">		dest.println(&quot;------------&quot;);</span>
+<span class="nc" id="L243">		dest.println(e+&quot;!&quot;);</span>
+<span class="nc" id="L244">		StackTraceElement[] s = e.getStackTrace();</span>
+<span class="nc bnc" id="L245" title="All 4 branches missed.">		for (int i = 0; (i &lt; 3) &amp;&amp; (i &lt; s.length); ++i) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">			if (i &gt; 0)	dest.print(&quot;  called from &quot;);</span>
+<span class="nc" id="L247">			else		dest.print(&quot;detected in &quot;);</span>
+<span class="nc" id="L248">			dest.println(s[i]);</span>
+		}
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		if (s.length &gt; 3)</span>
+<span class="nc" id="L251">			dest.println(&quot;  called from ...&quot;);</span>
+<span class="nc" id="L252">		dest.println(&quot;------------\nYour program continues ...\n------------&quot;);</span>
+<span class="nc" id="L253">	}</span>
+
+	// -------------------
+
+	private void addAnimal() {
+<span class="nc bnc" id="L258" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot add an animal to a null zoo&quot;;</span>
+
+<span class="nc" id="L260">		Questioner question = new Questioner(ucnAddAnimal);</span>
+<span class="nc" id="L261">		question.addString(&quot;kind&quot;);</span>
+<span class="nc" id="L262">		question.addString(&quot;name&quot;);</span>
+<span class="nc" id="L263">		question.addInt(&quot;age&quot;);</span>
+
+<span class="nc bnc" id="L265" title="All 2 branches missed.">		while (!question.isCancelled()) {</span>
+<span class="nc" id="L266">			question.setVisible(true);</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">			if (question.isOke()) {</span>
+<span class="nc" id="L268">				String animalKind = question.getString(&quot;kind&quot;);</span>
+<span class="nc" id="L269">				String animalName = question.getString(&quot;name&quot;);</span>
+<span class="nc" id="L270">				int animalAge = question.getInt(&quot;age&quot;);</span>
+
+<span class="nc" id="L272">				zoo.addAnimal( new Animal(animalKind, animalName, animalAge) );</span>
+				// did status changed?
+<span class="nc bnc" id="L274" title="All 2 branches missed.">				if (zoo.hasAnimals()) {</span>
+<span class="nc" id="L275">					useCaseSet.enableUseCase(ucnRemoveAnimal);</span>
+<span class="nc" id="L276">					useCaseSet.enableUseCase(ucnSaveZoo);</span>
+				}
+				break;
+			}
+		}
+<span class="nc" id="L281">	} // addAnimal</span>
+
+	// ----------
+
+	private void removeAnimal() {
+<span class="nc bnc" id="L286" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot remove an animal from a null zoo&quot;;</span>
+
+		// sanity check (maybe this usecase should have been disabled)
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		if (!zoo.hasAnimals()) {</span>
+<span class="nc" id="L290">			Messenger.say(&quot;Sorry, there are no animals to remove&quot;);</span>
+<span class="nc" id="L291">			return;</span>
+		}
+
+<span class="nc" id="L294">		Questioner question = new Questioner(ucnRemoveAnimal);</span>
+<span class="nc" id="L295">		question.addString(&quot;kind&quot;);</span>
+<span class="nc" id="L296">		question.addString(&quot;name&quot;);</span>
+
+<span class="nc bnc" id="L298" title="All 2 branches missed.">		while (!question.isCancelled()) {</span>
+<span class="nc" id="L299">			question.setVisible(true);</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">			if (question.isOke()) {</span>
+<span class="nc" id="L301">				String animalKind = question.getString(&quot;kind&quot;);</span>
+<span class="nc" id="L302">				String animalName = question.getString(&quot;name&quot;);</span>
+<span class="nc" id="L303">				zoo.removeAnimal(animalKind, animalName);</span>
+				// did status changed?
+<span class="nc bnc" id="L305" title="All 2 branches missed.">				if (!zoo.hasAnimals()) {</span>
+<span class="nc" id="L306">					useCaseSet.disableUseCase(ucnRemoveAnimal);</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">					if (!zoo.hasEmployees())</span>
+<span class="nc" id="L308">						useCaseSet.disableUseCase(ucnSaveZoo);</span>
+				}
+				break;
+			}
+		}
+<span class="nc" id="L313">	} // removeAnimal</span>
+
+	// ====================
+
+	private void addEmployee() {
+<span class="nc bnc" id="L318" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot add an employee to a null zoo&quot;;</span>
+
+		// to collect employee data
+<span class="nc" id="L321">		int employeeNumber = 0;</span>
+<span class="nc" id="L322">		int employeeType = 0;</span>
+<span class="nc" id="L323">		String employeeName = null;</span>
+<span class="nc" id="L324">		int employeeAge = 0;</span>
+
+		// What kind of employee ?
+<span class="nc" id="L327">		String[] categories = { &quot;--type--&quot;, &quot;manager&quot;, &quot;administrator&quot;, &quot;zookeeper&quot; };</span>
+
+<span class="nc" id="L329">		Questioner question = new Questioner(ucnAddEmployee);</span>
+<span class="nc" id="L330">		question.addChoice(&quot;type&quot;, categories);</span>
+<span class="nc" id="L331">		question.addInt(&quot;number&quot;);</span>
+<span class="nc" id="L332">		question.addString(&quot;name&quot;);</span>
+<span class="nc" id="L333">		question.addInt(&quot;age&quot;);</span>
+
+<span class="nc bnc" id="L335" title="All 2 branches missed.">		while (!question.isCancelled()) {</span>
+<span class="nc" id="L336">			question.setVisible(true);</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">			if (question.isOke()) {</span>
+<span class="nc" id="L338">				employeeType = question.getSelectedIndex(&quot;type&quot;);</span>
+<span class="nc" id="L339">				employeeNumber = question.getInt(&quot;number&quot;);</span>
+<span class="nc" id="L340">				employeeName = question.getString(&quot;name&quot;);</span>
+<span class="nc" id="L341">				employeeAge = question.getInt(&quot;age&quot;);</span>
+<span class="nc" id="L342">				break;</span>
+			}
+		}
+
+<span class="nc bnc" id="L346" title="All 2 branches missed.">		if (question.isCancelled())</span>
+<span class="nc" id="L347">			return;</span>
+
+		// Make the right kind of employee
+<span class="nc" id="L350">		Employee employee = null;</span>
+<span class="nc bnc" id="L351" title="All 4 branches missed.">		switch (employeeType)</span>
+		{
+		case 1: // Manager
+<span class="nc" id="L354">			employee = new Manager(employeeNumber, employeeName, employeeAge);</span>
+//			employee = new Employee(Employee.MANAGER, employeeNumber, employeeName, employeeAge);
+<span class="nc" id="L356">			break;</span>
+
+		case 2: // Administrator
+<span class="nc" id="L359">			employee = new Administrator(employeeNumber, employeeName, employeeAge);</span>
+//			employee = new Employee(Employee.ADMINISTRATOR, employeeNumber, employeeName, employeeAge);
+			// and we also have to do ...
+<span class="nc" id="L362">			assignManager(employee);</span>
+<span class="nc" id="L363">			break;</span>
+
+		case 3: // Zookeeper
+			// need more information
+<span class="nc" id="L367">			String animalKind = null;</span>
+<span class="nc" id="L368">			animalKind = Questioner.askString(&quot;what kind of animal&quot;, &quot;&quot;);</span>
+<span class="nc" id="L369">			Cage cage = zoo.findCage(animalKind);</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">			if (cage == null) cage = zoo.makeCage(animalKind);</span>
+<span class="nc" id="L371">			employee = new Keeper(employeeNumber, employeeName, employeeAge, cage);</span>
+//			employee = new Employee(Employee.ZOOKEEPER, employeeNumber, employeeName, employeeAge);
+//			employee.setCage(cage);
+<span class="nc" id="L374">			assignManager(employee);</span>
+			break;
+		}
+<span class="nc" id="L377">		zoo.addEmployee(employeeNumber, employee);</span>
+		// did status changed?
+<span class="nc bnc" id="L379" title="All 2 branches missed.">		if (zoo.hasEmployees()) {</span>
+<span class="nc" id="L380">			useCaseSet.enableUseCase(ucnRemoveEmployee);</span>
+<span class="nc" id="L381">			useCaseSet.enableUseCase(ucnSaveZoo);</span>
+		}
+<span class="nc" id="L383">	} // addEmployee</span>
+
+	// internal assist function
+	private void assignManager(Employee employee) {
+<span class="nc bnc" id="L387" title="All 4 branches missed.">		assert zoo != null : &quot;Trying to attach an employee to a manager in a null zoo&quot;;</span>
+<span class="nc bnc" id="L388" title="All 4 branches missed.">		assert employee != null : &quot;Cannot attach a null employee to a manager&quot;;</span>
+
+<span class="nc" id="L390">		zoo.showManagers();</span>
+
+<span class="nc" id="L392">		int managerNumber = Questioner.askInt(&quot;manager&quot;, 0);</span>
+<span class="nc" id="L393">		zoo.assignManager(managerNumber, employee);</span>
+<span class="nc" id="L394">	} // assignManager</span>
+
+	public void removeEmployee() {
+<span class="nc bnc" id="L397" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot remove an employee from a null zoo&quot;;</span>
+
+		// sanity check (maybe usecase should have been disabled)
+<span class="nc bnc" id="L400" title="All 2 branches missed.">		if (!zoo.hasEmployees()) {</span>
+<span class="nc" id="L401">			Messenger.say(&quot;Sorry, can not remove an employee when there are none&quot;);</span>
+<span class="nc" id="L402">			return;</span>
+		}
+
+<span class="nc" id="L405">		Questioner question = new Questioner(ucnRemoveEmployee);</span>
+<span class="nc" id="L406">		question.addInt(&quot;number&quot;);</span>
+
+<span class="nc bnc" id="L408" title="All 2 branches missed.">		while (!question.isCancelled()) {</span>
+<span class="nc" id="L409">			question.setVisible(true);</span>
+<span class="nc bnc" id="L410" title="All 2 branches missed.">			if (question.isOke()) {</span>
+<span class="nc" id="L411">				int employeeNumber = question.getInt(&quot;number&quot;);</span>
+<span class="nc" id="L412">				zoo.removeEmployee(employeeNumber);</span>
+				// did status changed?
+<span class="nc bnc" id="L414" title="All 2 branches missed.">				if (!zoo.hasEmployees()) {</span>
+<span class="nc" id="L415">					useCaseSet.disableUseCase(ucnRemoveEmployee);</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">					if (!zoo.hasAnimals())</span>
+<span class="nc" id="L417">						useCaseSet.disableUseCase(ucnSaveZoo);</span>
+				}
+				break;
+			}
+		}
+<span class="nc" id="L422">	} // removeEmployee</span>
+
+	// ======================================================================
+	// The code to save or load zoo data or create a new one
+
+	private void newZoo() {
+<span class="nc" id="L428">		String name = zoo.getName();</span>
+<span class="nc" id="L429">		zoo = new Zoo(name);</span>
+<span class="nc" id="L430">		useCaseSet.disableUseCase(ucnRemoveAnimal);</span>
+<span class="nc" id="L431">		useCaseSet.disableUseCase(ucnRemoveEmployee);</span>
+<span class="nc" id="L432">		useCaseSet.disableUseCase(ucnSaveZoo);</span>
+<span class="nc" id="L433">		System.out.println(&quot;-----------------\nCreated a new zoo&quot;);</span>
+<span class="nc" id="L434">	}</span>
+
+	// Load saved zoo-data from a file:
+	// The first number tells an &quot;action&quot;.
+	// 1=add animal, 2=add employee, 0=done.
+	private void loadFile() {
+<span class="nc bnc" id="L440" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot load to a null zoo&quot;;</span>
+
+		// Load from which file ? This time we also offer the backup verions.
+<span class="nc" id="L443">		String[] options = { &quot;--choose--&quot;, files[0], files[2], files[1], files[3] };</span>
+<span class="nc" id="L444">		String the_loadfile = Questioner.askChoice(&quot;load file &quot;, options);</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">		if (the_loadfile == &quot;--choose--&quot;)</span>
+<span class="nc" id="L446">			return;</span>
+
+		try {
+<span class="nc" id="L449">			Scanner scanner = new Scanner(new File(the_loadfile));</span>
+<span class="nc" id="L450">			Pattern alfanum = Pattern.compile(&quot;\\w+&quot;); // i.e &quot;word&quot;</span>
+
+<span class="nc" id="L452">			System.out.println(&quot;Loading from &quot; + the_loadfile);</span>
+
+<span class="nc" id="L454">			int animals = 0, employees = 0; // to count how many we have added</span>
+
+			// Until we run out of lines ...
+<span class="nc bnc" id="L457" title="All 2 branches missed.">			while (scanner.hasNextLine()) {</span>
+
+				// Read action code
+<span class="nc" id="L460">				int action = scanner.nextInt();</span>
+<span class="nc bnc" id="L461" title="All 4 branches missed.">				switch (action)</span>
+				{
+				case 0: // Ready
+<span class="nc" id="L464">					scanner.close();</span>
+<span class="nc" id="L465">					System.out.println(animals + &quot; animals and &quot; + employees + &quot; employees loaded\n&quot;);</span>
+					// did status changed?
+<span class="nc bnc" id="L467" title="All 2 branches missed.">					if (zoo.hasAnimals()) {</span>
+<span class="nc" id="L468">						useCaseSet.enableUseCase(ucnRemoveAnimal);</span>
+<span class="nc" id="L469">						useCaseSet.enableUseCase(ucnSaveZoo);</span>
+					}
+<span class="nc bnc" id="L471" title="All 2 branches missed.">					if (zoo.hasEmployees()) {</span>
+<span class="nc" id="L472">						useCaseSet.enableUseCase(ucnRemoveEmployee);</span>
+<span class="nc" id="L473">						useCaseSet.enableUseCase(ucnSaveZoo);</span>
+					}
+<span class="nc" id="L475">					return;</span>
+
+				case 1: { // Add animal
+					// Get animal data
+<span class="nc" id="L479">					String kind = scanner.next(alfanum);</span>
+<span class="nc" id="L480">					String name = scanner.next(alfanum);</span>
+<span class="nc" id="L481">					int age = scanner.nextInt();</span>
+<span class="nc" id="L482">					zoo.addAnimal(new Animal(kind, name, age));</span>
+<span class="nc" id="L483">					++animals;</span>
+					}
+<span class="nc" id="L485">					break; // add animal</span>
+
+				case 2: { // Add employee
+					// Get employee data
+<span class="nc" id="L489">					int category = scanner.nextInt();</span>
+<span class="nc" id="L490">					int number = scanner.nextInt();</span>
+<span class="nc" id="L491">					String name = scanner.next(alfanum);</span>
+<span class="nc" id="L492">					int age = scanner.nextInt();</span>
+<span class="nc" id="L493">					Employee employee = null;</span>
+<span class="nc bnc" id="L494" title="All 4 branches missed.">					switch (category) // what type of employee?</span>
+					{
+					case 1: { // Manager
+<span class="nc" id="L497">						employee = new Manager(number, name, age);</span>
+//						employee = new Employee(Employee.MANAGER, number, name, age);
+						}
+<span class="nc" id="L500">						break;</span>
+
+					case 2: { // Administrator
+<span class="nc" id="L503">						employee = new Administrator(number, name, age);</span>
+//						employee = new Employee(Employee.ADMINISTRATOR, number, name, age);
+						// read number of his boss
+<span class="nc" id="L506">						int boss = scanner.nextInt();</span>
+<span class="nc" id="L507">						zoo.assignManager(boss, employee);</span>
+						}
+<span class="nc" id="L509">						break;</span>
+
+					case 4: { // Zoo keeper
+						// read cage type
+<span class="nc" id="L513">						String kind = scanner.next(alfanum);</span>
+<span class="nc" id="L514">						Cage cage = zoo.findCage(kind);</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">						if (cage == null) cage = zoo.makeCage(kind);</span>
+<span class="nc" id="L516">						employee = new Keeper(number, name, age, cage);</span>
+//						employee = new Employee(Employee.ZOOKEEPER, number, name, age);
+//						employee.setCage(cage);
+						// read number of his boss
+<span class="nc" id="L520">						int boss = scanner.nextInt();</span>
+<span class="nc" id="L521">						zoo.assignManager(boss, employee);</span>
+						}
+<span class="nc" id="L523">						break;</span>
+
+					default: // no such employee type
+<span class="nc" id="L526">						System.err.println(&quot;Found bogus category &quot; + category);</span>
+<span class="nc" id="L527">						scanner.close();</span>
+<span class="nc" id="L528">						return;</span>
+
+					} // end category
+<span class="nc" id="L531">					zoo.addEmployee(number, employee);</span>
+<span class="nc" id="L532">					++employees;</span>
+					}
+<span class="nc" id="L534">					break; // add employee</span>
+
+				default: // no such action code
+<span class="nc" id="L537">					System.err.println(&quot;Found bogus action &quot; + action);</span>
+<span class="nc" id="L538">					scanner.close();</span>
+<span class="nc" id="L539">					return;</span>
+
+				} // end actions
+<span class="nc" id="L542">			} // end input</span>
+<span class="nc" id="L543">			scanner.close();</span>
+<span class="nc" id="L544">			System.err.println(&quot;Unexpected EOF!&quot;);</span>
+<span class="nc" id="L545">		} catch (java.io.FileNotFoundException fnfe) {</span>
+<span class="nc" id="L546">			System.err.println(&quot;File &quot; + the_loadfile + &quot; not found&quot;);</span>
+<span class="nc" id="L547">		} catch (java.util.NoSuchElementException nsee) {</span>
+<span class="nc" id="L548">			System.err.println(&quot;Found bad input&quot;);</span>
+<span class="nc" id="L549">		}</span>
+<span class="nc" id="L550">	} // loadFile</span>
+
+	// Save all zoo data to a file.
+	private void saveFile() {
+<span class="nc bnc" id="L554" title="All 4 branches missed.">		assert zoo != null : &quot;Cannot save a null zoo&quot;;</span>
+
+		// into which file ? only offer the &quot;working&quot; versions!
+<span class="nc" id="L557">		String[] options = { &quot;--choose--&quot;, files[0], files[1] };</span>
+<span class="nc" id="L558">		String the_savefile = Questioner.askChoice(&quot;to file &quot;, options);</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">		if (the_savefile == &quot;--choose--&quot;)</span>
+<span class="nc" id="L560">			return;</span>
+
+		try {
+<span class="nc" id="L563">			PrintWriter out = new PrintWriter(new FileWriter(the_savefile));</span>
+<span class="nc" id="L564">			System.out.println(&quot;Saving to &quot; + the_savefile);</span>
+<span class="nc" id="L565">			zoo.saveFile(out);</span>
+<span class="nc" id="L566">			out.println(&quot;0&quot;);</span>
+<span class="nc" id="L567">			out.close();</span>
+<span class="nc" id="L568">		} catch (java.io.IOException ioe) {</span>
+<span class="nc" id="L569">			System.err.println(&quot;Oops, can not make &quot; + the_savefile);</span>
+<span class="nc" id="L570">		}</span>
+<span class="nc" id="L571">	} // saveFile</span>
+
+
+	// ==========================================
+	// Code to check the 'asserts-enabled' status
+<span class="nc" id="L576">	public static boolean java_assert_enabled = false;</span>
+
+	static {
+<span class="nc bnc" id="L579" title="All 4 branches missed.">		assert java_assert_enabled = true; // mis-using a side-effect here !</span>
+<span class="nc" id="L580">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

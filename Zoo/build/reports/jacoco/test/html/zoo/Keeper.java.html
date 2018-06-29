@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Keeper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">zoo</a> &gt; <span class="el_source">Keeper.java</span></div><h1>Keeper.java</h1><pre class="source lang-java linenums">package zoo;
+
+import java.io.PrintWriter;
+
+
+/**
+ * The Zoo Keeper class.
+ * 
+ * @author R.Akkersdijk
+ */
+<span class="pc bpc" id="L11" title="1 of 2 branches missed.">public class Keeper extends Employee</span>
+{
+
+	// For: Keepers only
+	private Cage the_cage; // takes care of the animals in this cage
+
+	public Keeper(int a_number, String a_name, int an_age, Cage a_cage) {
+<span class="fc" id="L18">		super(a_number, a_name, an_age);</span>
+		// The superclass will take care of the employee assertions
+<span class="pc bpc" id="L20" title="1 of 4 branches missed.">		assert a_cage != null : &quot;null kooi&quot;;</span>
+<span class="fc" id="L21">		the_cage = a_cage; // the cage taken care of</span>
+<span class="fc" id="L22">	}</span>
+
+	// This method is no longer needed
+	@Deprecated
+	public void setCage(Cage cage) {
+<span class="nc bnc" id="L27" title="All 4 branches missed.">		assert cage != null : &quot;null cage&quot;;</span>
+<span class="nc" id="L28">		the_cage = cage;</span>
+<span class="nc" id="L29">	}</span>
+
+	@Override
+	public float getSalary() {
+<span class="fc" id="L33">		return 2000 + the_cage.size() * 100; // number of animals</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L38">		return String.format(&quot;%10s %3d&quot;, &quot;keeper&quot;, the_number);</span>
+	}
+
+	@Override
+	void print() {
+<span class="nc" id="L43">		super.print(); // handles employee aspects</span>
+<span class="nc" id="L44">		System.out.print(&quot;\tcares for &quot; + the_cage.getKind());</span>
+<span class="nc" id="L45">	}</span>
+
+	// =====================================
+	@Override
+	public void saveFile(PrintWriter out) {
+<span class="nc bnc" id="L50" title="All 4 branches missed.">		assert out != null : &quot;null printwriter&quot;;</span>
+<span class="nc" id="L51">		out.println(&quot;2\t3\t&quot; // action 2=employee, type 3=keeper</span>
+				+ the_number + &quot;\t&quot; + the_name + &quot;\t&quot; + the_age
+<span class="nc" id="L53">				+ &quot;\t&quot; + the_cage.getKind() + &quot;\t&quot; + the_boss.the_number);</span>
+<span class="nc" id="L54">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="AdministratorTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2018-06-27T13:16:50" hostname="Laptops-MacBook-Pro.local" time="0.002">
+  <properties/>
+  <testcase name="testAdministrator0" classname="AdministratorTest" time="0.0"/>
+  <testcase name="testAdministrator1" classname="AdministratorTest" time="0.0"/>
+  <testcase name="testAdministrator2" classname="AdministratorTest" time="0.001"/>
+  <testcase name="testAdministrator3" classname="AdministratorTest" time="0.0"/>
+  <testcase name="testAdministrator4" classname="AdministratorTest" time="0.0"/>
+  <testcase name="testAdministrator0b" classname="AdministratorTest" time="0.0"/>
+  <testcase name="testAdministrator" classname="AdministratorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

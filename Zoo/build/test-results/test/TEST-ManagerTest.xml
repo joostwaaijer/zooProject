@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ManagerTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2018-06-27T13:16:50" hostname="Laptops-MacBook-Pro.local" time="0.004">
+  <properties/>
+  <testcase name="testAddEmployee1" classname="ManagerTest" time="0.0"/>
+  <testcase name="testAddEmployee2" classname="ManagerTest" time="0.0"/>
+  <testcase name="testAddEmployee" classname="ManagerTest" time="0.0"/>
+  <testcase name="testIsLeaving" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager0a" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager0b" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager3a" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager3b" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager1" classname="ManagerTest" time="0.0"/>
+  <testcase name="testManager2" classname="ManagerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

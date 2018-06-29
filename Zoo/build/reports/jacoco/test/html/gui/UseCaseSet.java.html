@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UseCaseSet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">UseCaseSet.java</span></div><h1>UseCaseSet.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Hashtable;
+
+import javax.swing.JFrame;
+import javax.swing.JButton;
+
+/**
+ * A UseCaseSet is a simple window which can be used to test various use-cases.
+ * It supports UML-Use-Cases bij creating a button-frame. Each button
+ * represents a user-initiated use-case.&lt;br&gt;
+ * Closing the UseCaseFrame ends the running application by calling
+ * &lt;tt&gt;System.exit(0)&lt;/tt&gt;&lt;br&gt;
+ * &lt;br&gt;
+ * Example:
+ * 
+ * &lt;pre&gt;
+ * import gui.UseCaseTest; // &amp;lt;i&amp;gt;adjust as needed&amp;lt;/i&amp;gt;
+ * 
+ * public class ApplicationInterface implements UseCaseHandler {
+ * 
+ * 	Application application; // &amp;lt;i&amp;gt;the application to be controlled&amp;lt;/i&amp;gt;
+ * 
+ * 	// &amp;lt;i&amp;gt;Execution starts here&amp;lt;/i&amp;gt;
+ * 	public ApplicationInterface(Application application) {
+ * 		this.application = application;
+ * 		// &amp;lt;i&amp;gt;Define the various use-cases&amp;lt;/i&amp;gt;
+ * 		UseCaseSet useCaseSet = new UseCaseSet(&amp;quot;Using UseCases&amp;quot;, this);
+ * 		useCaseSet.addUseCase(&amp;quot;Doing one thing&amp;quot;);
+ * 		useCaseSet.addUseCase(&amp;quot;Doing yet another thing&amp;quot;);
+ * 		useCaseSet.show();
+ * 	}
+ * 
+ * 	// &amp;lt;i&amp;gt;The use-case callback method&amp;lt;/i&amp;gt;
+ * 	public void handleUseCase(String useCaseName) {	// &amp;lt;i&amp;gt;must be implemented&amp;lt;/i&amp;gt;
+ *             if (useCaseName.equals(&amp;quot;Doing one thing&amp;quot;) {
+ *                 application.doOneThing();	// &amp;lt;i&amp;gt;your method to be invoked&amp;lt;/i&amp;gt;
+ *             } else
+ *             if (useCaseName.equals(&amp;quot;Doing yet another thing&amp;quot;) {
+ *                 application.doAnotherThing();	// &amp;lt;i&amp;gt;another method to be invoked&amp;lt;/i&amp;gt;
+ *             } else
+ *                assert false : &amp;quot;NOT REACHED&amp;quot;;
+ *         }
+ * }
+ * &lt;/pre&gt;
+ * 
+ * @author e.jannink for HE-ICT
+ * @version 08 febr 1999
+ * 
+ * @author R.Akkersdijk - revised for java 5
+ * @version 09 march 2012
+ * @version 09 april 2013
+ */
+<span class="nc bnc" id="L59" title="All 2 branches missed.">@SuppressWarnings(&quot;serial&quot;)</span>
+public class UseCaseSet extends JFrame implements ActionListener {
+	private UseCaseHandler handler;
+<span class="nc" id="L62">	private Hashtable&lt;String, JButton&gt; usecases = new Hashtable&lt;String, JButton&gt;();</span>
+
+	/**
+	 * Constructs a titled window and assigns the usecasehandler. The Frame is
+	 * closeable, which normally should close the application too&lt;br&gt;
+	 * 
+	 * @param title
+	 *            the frame-title
+	 * @param newHandler
+	 *            this object will be handling all cases, must implement the
+	 *            UseCaseHandler interface.
+	 * 
+	 * @exception AssertionError
+	 *                The title cannot be null
+	 * @exception AssertionError
+	 *                The title cannot be empty
+	 */
+	public UseCaseSet(String title, UseCaseHandler newHandler) {
+<span class="nc" id="L80">		super(title);</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">		assert title != null : &quot;The title cannot be null&quot;;</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">		assert !title.isEmpty() : &quot;The title cannot be empty&quot;;</span>
+<span class="nc" id="L83">		handler = newHandler;</span>
+<span class="nc" id="L84">		setLocation(30, 30);</span>
+<span class="nc" id="L85">		setLayout(new GridLayout(0, 1));</span>
+<span class="nc" id="L86">		enableWindowClosing();</span>
+<span class="nc" id="L87">	}</span>
+
+	/**
+	 * Adds a useCase button to the useCaseFrame.
+	 * 
+	 * @param useCaseName
+	 *            the name of the added usecase, which is also used to identify
+	 *            the usecase.
+	 * 
+	 * @exception AssertionError
+	 *                A useCaseName cannot be null
+	 * @exception AssertionError
+	 *                A useCaseName cannot be empty
+	 */
+	public void addUseCase(String useCaseName) {
+<span class="nc bnc" id="L102" title="All 4 branches missed.">		assert useCaseName != null : &quot;A useCaseName cannot be null&quot;;</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">		assert !useCaseName.isEmpty() : &quot;A useCaseName cannot be empty&quot;;</span>
+<span class="nc" id="L104">		JButton button = new JButton(useCaseName);</span>
+<span class="nc" id="L105">		usecases.put(useCaseName, button);</span>
+<span class="nc" id="L106">		button.addActionListener(this);</span>
+<span class="nc" id="L107">		this.add(button);</span>
+<span class="nc" id="L108">	}</span>
+
+	/**
+	 * Disable the given usecase
+	 * 
+	 * @param useCaseName
+	 *            the name of the usecase to disable.
+	 * 
+	 * @exception AssertionError
+	 *                A useCaseName cannot be null
+	 * @exception AssertionError
+	 *                A useCaseName cannot be empty
+	 */
+	public void disableUseCase(String useCaseName) {
+<span class="nc bnc" id="L122" title="All 4 branches missed.">		assert useCaseName != null : &quot;A useCaseName cannot be null&quot;;</span>
+<span class="nc bnc" id="L123" title="All 4 branches missed.">		assert !useCaseName.isEmpty() : &quot;A useCaseName cannot be empty&quot;;</span>
+<span class="nc" id="L124">		JButton button = usecases.get(useCaseName);</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">		assert button != null : &quot;UseCase &quot; + useCaseName + &quot; does not exist&quot;;</span>
+<span class="nc" id="L126">		button.setEnabled(false);</span>
+<span class="nc" id="L127">	}</span>
+
+	/**
+	 * Enable the given usecase
+	 * 
+	 * @param useCaseName
+	 *            the name of the usecase to disable.
+	 * 
+	 * @exception AssertionError
+	 *                A useCaseName cannot be null
+	 * @exception AssertionError
+	 *                A useCaseName cannot be empty
+	 */
+	public void enableUseCase(String useCaseName) {
+<span class="nc bnc" id="L141" title="All 4 branches missed.">		assert useCaseName != null : &quot;A useCaseName cannot be null&quot;;</span>
+<span class="nc bnc" id="L142" title="All 4 branches missed.">		assert !useCaseName.isEmpty() : &quot;A useCaseName cannot be empty&quot;;</span>
+<span class="nc" id="L143">		JButton button = usecases.get(useCaseName);</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">		assert button != null : &quot;UseCase &quot; + useCaseName + &quot; does not exist&quot;;</span>
+<span class="nc" id="L145">		button.setEnabled(true);</span>
+<span class="nc" id="L146">	}</span>
+
+	/** Handles the buttons, do not invoke it yourself. */
+	public void actionPerformed(ActionEvent ae) {
+<span class="nc bnc" id="L150" title="All 4 branches missed.">		assert ae != null;</span>
+<span class="nc" id="L151">		String useCaseName = ae.getActionCommand();</span>
+<span class="nc" id="L152">		handler.handleUseCase(useCaseName);</span>
+<span class="nc" id="L153">	}</span>
+
+	/**
+	 * Makes the UseCaseSet visible at it's preferred size.&lt;br&gt;
+	 * Should be called after adding all UseCases.
+	 * 
+	 * @param show
+	 *            the desired state
+	 */
+	@Override
+	public void setVisible(boolean show) {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">		if (show) {</span>
+<span class="nc" id="L165">			pack();</span>
+<span class="nc" id="L166">			setResizable(true);</span>
+		}
+<span class="nc" id="L168">		super.setVisible(show);</span>
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * @deprecated Makes the UseCase set visible at it's preferred size&lt;br&gt;
+	 *             Should be called after adding all UseCases.
+	 */
+	@Override
+	public void show() {
+<span class="nc" id="L177">		pack();</span>
+<span class="nc" id="L178">		setResizable(false);</span>
+<span class="nc" id="L179">		super.show();</span>
+<span class="nc" id="L180">	}</span>
+
+	private void enableWindowClosing() {
+<span class="nc" id="L183">		addWindowListener(new WindowAdapter() {</span>
+			public void windowClosing(WindowEvent e) {
+<span class="nc" id="L185">				System.exit(0);</span>
+<span class="nc" id="L186">			}</span>
+		});
+<span class="nc" id="L188">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

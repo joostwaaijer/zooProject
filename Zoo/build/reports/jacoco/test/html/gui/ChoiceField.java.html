@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChoiceField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">ChoiceField.java</span></div><h1>ChoiceField.java</h1><pre class="source lang-java linenums">package gui;
+
+import javax.swing.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+
+/**
+ * Provides a wrapper for use by the Questioner.
+ * 
+ * @author E.Jannink
+ */
+@SuppressWarnings({&quot;serial&quot;, &quot;rawtypes&quot;})
+// package private class
+class ChoiceField extends JComboBox {
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L17">	public ChoiceField(Enumeration choices) {</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">		while (choices.hasMoreElements()) {</span>
+<span class="nc" id="L19">			String choice = choices.nextElement().toString();</span>
+<span class="nc" id="L20">			addItem(choice);</span>
+<span class="nc" id="L21">		}</span>
+<span class="nc" id="L22">	}</span>
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L25">	public ChoiceField(Iterable&lt;Object&gt; the_choices) {</span>
+<span class="nc" id="L26">		Iterator&lt;Object&gt; choices = the_choices.iterator();</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		while (choices.hasNext()) {</span>
+<span class="nc" id="L28">			String choice = choices.next().toString();</span>
+<span class="nc" id="L29">			addItem(choice);</span>
+<span class="nc" id="L30">		}</span>
+<span class="nc" id="L31">	}</span>
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L34">	public ChoiceField(Object[] the_choices) {</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		for (Object object: the_choices) {</span>
+<span class="nc" id="L36">			String choice = object.toString();</span>
+<span class="nc" id="L37">			addItem(choice);</span>
+		}
+<span class="nc" id="L39">	}</span>
+
+	@Override
+	public String getSelectedItem() {
+<span class="nc" id="L43">		return (String) super.getSelectedItem();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

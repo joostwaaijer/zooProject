@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Animal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">zoo</a> &gt; <span class="el_source">Animal.java</span></div><h1>Animal.java</h1><pre class="source lang-java linenums">package zoo;
+
+// for saveFile() at the end
+import java.io.PrintWriter;
+
+
+/**
+ * Animal class.
+ * 
+ * @author R.Akkersdijk
+ */
+<span class="pc bpc" id="L12" title="1 of 2 branches missed.">public class Animal</span>
+{
+	// Animal data
+	private final String the_kind;
+	private final String the_name;
+	private int the_age;
+
+	/**
+	 * Animal constructor
+	 * 
+	 * @param kind What kind of animal this is
+	 * @param name The name of the animal
+	 * @param age The age of the animal (between 0 and 200 inclusive)
+	 */
+<span class="fc" id="L26">	public Animal(String kind, String name, int age) {</span>
+		// First the &quot;pre-condities&quot; (i.e. what we expect to
+		// be true when the program works correctly)
+		// which say something about the parameters.
+
+		// The kind and the name are strings, which should at least be ...
+<span class="pc bpc" id="L32" title="1 of 4 branches missed.">		assert kind != null		: &quot;null kind&quot;;					// M</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">		assert !kind.isEmpty()	: &quot;empty kind&quot;;					// M</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">		assert name != null		: &quot;null name&quot;;					// M</span>
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">		assert !name.isEmpty()	: &quot;empty name&quot;;					// M</span>
+		// ... being more specific about &quot;names&quot; usually is a waste of time.
+
+		// About the age we expect something like ...
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">		assert 0 &lt;= age : &quot;negative age&quot;;						// M</span>
+<span class="pc bpc" id="L40" title="1 of 4 branches missed.">		assert age &lt;= 200 : &quot;unlikely age&quot;;						// M</span>
+		// ... but the upper boundary is a bit arbitrary.
+
+		// Oke, those parameters make sense
+<span class="fc" id="L44">		the_kind = kind;</span>
+<span class="fc" id="L45">		the_name = name;</span>
+<span class="fc" id="L46">		the_age = age;</span>
+
+		// At the end of a method we can also specify
+		// post-conditions (i.e. &quot;we now guaranty that ...&quot;)
+		// but in most programs this is a bit of overkill.
+		// Note: Post-conditions always say something about &quot;this&quot; object only.
+<span class="pc bpc" id="L52" title="2 of 4 branches missed.">		assert the_kind != null;				// W</span>
+<span class="pc bpc" id="L53" title="2 of 4 branches missed.">		assert the_kind.equals(kind);			// W</span>
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">		assert the_name != null;				// W</span>
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">		assert the_name.equals(name);			// W</span>
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">		assert the_age == age;					// W</span>
+<span class="fc" id="L57">	}</span>
+
+	// used by: Zoo.addAnimal
+	public String getKind() {
+<span class="fc" id="L61">		return the_kind;</span>
+	}
+
+	// Is this animal a ... ?
+	public boolean isKind(String kind) {
+		// The next asserts are not about THIS object,
+		// but detect errors made elsewhere.
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">		assert kind != null : &quot;null animal kind question&quot;;		// S</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">		assert !kind.isEmpty() : &quot;empty animal kind question&quot;;	// S</span>
+<span class="fc" id="L70">		return kind.equals(the_kind);</span>
+	}
+
+	public String getName() {
+<span class="fc" id="L74">		return the_name;</span>
+	}
+
+	// Is this animal with name ... ?
+	public boolean isAnimal(String name) {
+		// See: isKind remark
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">		assert name != null : &quot;null name question&quot;;		// S</span>
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">		assert !name.isEmpty() : &quot;lege name question&quot;;	// S</span>
+<span class="fc" id="L82">		return name.equals(the_name);</span>
+	}
+
+	public void print() {
+<span class="nc" id="L86">		System.out.println(the_kind + &quot;\t&quot; + the_name + &quot;\t&quot; + the_age);</span>
+<span class="nc" id="L87">	}</span>
+
+	public String toString() {
+<span class="fc" id="L90">		return String.format(&quot;Animal %s %s&quot;, the_kind, the_name);</span>
+	}
+
+	// =====================================
+	public void saveFile(PrintWriter out) {
+<span class="nc bnc" id="L95" title="All 4 branches missed.">		assert out != null : &quot;null PrintWriter&quot;;</span>
+<span class="nc" id="L96">		out.println(&quot;1\t&quot; // action code 1=add animal</span>
+				+ the_kind + &quot;\t&quot; + the_name + &quot;\t&quot; + the_age);
+<span class="nc" id="L98">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

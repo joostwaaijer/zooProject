@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Questioner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zoo</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">Questioner.java</span></div><h1>Questioner.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+/**
+ * &lt;p&gt;
+ * Provides two ways for dealing with questions.
+ * &lt;/p&gt;
+ * 
+ * &lt;p&gt;
+ * The easy way to ask for a String, int or double is to use the static
+ * &lt;tt&gt;askString&lt;/tt&gt;, &lt;tt&gt;askInt&lt;/tt&gt;, &lt;tt&gt;askDouble&lt;/tt&gt; or &lt;tt&gt;askChoice&lt;/tt&gt;
+ * methods. These setup a Questioner and pose the question. When the ok-button
+ * is clicked, the result is evaluated and returned.
+ * &lt;/p&gt;
+ * 
+ * &lt;p&gt;
+ * You can also build a Questioner that contains more questions by creating a
+ * Questioner instance yourself and then add multiple questions. When ready
+ * adding questions, make the Questioner show itself.&lt;br&gt;
+ * When the OK-button is applied, the window will disappear and you may retrieve
+ * the replies to the various questions with &lt;tt&gt;getString&lt;/tt&gt;, &lt;tt&gt;getInt&lt;/tt&gt;,
+ * &lt;tt&gt;getDouble&lt;/tt&gt; or &lt;tt&gt;getChoice&lt;/tt&gt;.&lt;br&gt;
+ * Make sure to ask for the right type of reply value to avoid casting
+ * exceptions.
+ * &lt;/p&gt;
+ */
+<span class="nc bnc" id="L32" title="All 2 branches missed.">@SuppressWarnings(&quot;serial&quot;)</span>
+public class Questioner extends JDialog implements ActionListener {
+
+<span class="nc" id="L35">	private Hashtable&lt;String, Component&gt; questions = new Hashtable&lt;String, Component&gt;();</span>
+
+<span class="nc" id="L37">	private JPanel labelPanel = new JPanel(new GridLayout(0, 1));</span>
+<span class="nc" id="L38">	private JPanel answerPanel = new JPanel(new GridLayout(0, 1));</span>
+<span class="nc" id="L39">	private JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));</span>
+<span class="nc" id="L40">	private JButton ok = new JButton(&quot;Ok&quot;);</span>
+<span class="nc" id="L41">	private JButton cancel = new JButton(&quot;Cancel&quot;);</span>
+
+<span class="nc" id="L43">	private boolean cancelled = false;</span>
+
+	/**
+	 * Constructs the Questioner-dialog
+	 * 
+	 * @param title
+	 *            Title of the window
+	 * 
+	 * @exception AssertionError
+	 *                title String can not be null
+	 * @exception AssertionError
+	 *                title String can not be empty
+	 */
+	public Questioner(String title) {
+<span class="nc" id="L57">		super(new JFrame(), true);</span>
+<span class="nc bnc" id="L58" title="All 4 branches missed.">		assert title != null : &quot;title String can not be null&quot;;</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">		assert !title.isEmpty() : &quot;title String can not be empty&quot;;</span>
+
+<span class="nc" id="L61">		setTitle(title);</span>
+<span class="nc" id="L62">		setLayout(new BorderLayout());</span>
+<span class="nc" id="L63">		buttonPanel.add(cancel);</span>
+<span class="nc" id="L64">		cancel.addActionListener(this);</span>
+<span class="nc" id="L65">		buttonPanel.add(ok);</span>
+<span class="nc" id="L66">		ok.addActionListener(this);</span>
+<span class="nc" id="L67">		add(buttonPanel, BorderLayout.SOUTH);</span>
+<span class="nc" id="L68">		add(labelPanel, BorderLayout.WEST);</span>
+<span class="nc" id="L69">		add(answerPanel, BorderLayout.CENTER);</span>
+<span class="nc" id="L70">	}</span>
+
+	// =============================================
+	// Various static methods for one-shot questions
+	// =============================================
+
+	/**
+	 * Returns a String value in reply to a question.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param value
+	 *            The initial answer string for this question
+	 * @return the confirmed answer or, if not confirmed the initial answer
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                initial answer String can not be null
+	 */
+	public static String askString(String question, String value) {
+<span class="nc bnc" id="L93" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">		assert value != null : &quot;initial answer String can not be null&quot;;</span>
+
+<span class="nc" id="L97">		Questioner questioner = new Questioner(&quot;Ask for a String&quot;);</span>
+<span class="nc" id="L98">		questioner.addString(question, value);</span>
+<span class="nc" id="L99">		questioner.setVisible(true);</span>
+<span class="nc" id="L100">		return questioner.getString(question);</span>
+	}
+
+	/**
+	 * Returns a int value in reply to a question.
+	 * 
+	 * An input key is only accepted if the evaluation of the text would provide
+	 * a legal int value, otherwise it is ignored.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param value
+	 *            The initial answer value for this question
+	 * @return the confirmed answer or, if not confirmed the initial answer
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 */
+	public static int askInt(String question, int value) {
+<span class="nc bnc" id="L121" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L122" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+
+<span class="nc" id="L124">		Questioner questioner = new Questioner(&quot;Ask for an integer&quot;);</span>
+<span class="nc" id="L125">		questioner.addInt(question, value);</span>
+<span class="nc" id="L126">		questioner.setVisible(true);</span>
+<span class="nc" id="L127">		return questioner.getInt(question);</span>
+	}
+
+	/**
+	 * Returns a double value in reply to a question.
+	 * 
+	 * An input key is only accepted if the evaluation of the text provides a
+	 * legal double value, otherwise it is ignored.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param value
+	 *            The initial answer value for this question
+	 * @return the confirmed answer or, if not confirmed the initial answer
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 */
+	public static double askDouble(String question, double value) {
+<span class="nc bnc" id="L148" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L149" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+
+<span class="nc" id="L151">		Questioner questioner = new Questioner(&quot;Ask for a double&quot;);</span>
+<span class="nc" id="L152">		questioner.addDouble(question, value);</span>
+<span class="nc" id="L153">		questioner.setVisible(true);</span>
+<span class="nc" id="L154">		return questioner.getDouble(question);</span>
+	}
+
+	/**
+	 * Returns the item selected from an array of choices.
+	 * 
+	 * Their toString() method is used to make the actual list.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            The array of choices
+	 * @return the String for the selected choice
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	public static String askChoice(String question, Object[] choices) {
+<span class="nc bnc" id="L176" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L178" title="All 4 branches missed.">		assert choices.length &gt; 0 : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L180">		Questioner questioner = new Questioner(&quot;Make a choice&quot;);</span>
+<span class="nc" id="L181">		questioner.addChoice(question, choices);</span>
+<span class="nc" id="L182">		questioner.setVisible(true);</span>
+<span class="nc" id="L183">		return questioner.getChoice(question);</span>
+	}
+
+	/**
+	 * Returns the item selected out of an Enumeration of choices.
+	 * 
+	 * Their toString() method is used to make the actual list.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            The Enumeration of choices
+	 * @return the selected choice
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	@SuppressWarnings(&quot;rawtypes&quot;)
+	public static String askChoice(String question, Enumeration choices) {
+<span class="nc bnc" id="L206" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L207" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L208" title="All 4 branches missed.">		assert choices.hasMoreElements() : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L210">		Questioner questioner = new Questioner(&quot;Make a choice&quot;);</span>
+<span class="nc" id="L211">		questioner.addChoice(question, choices);</span>
+<span class="nc" id="L212">		questioner.setVisible(true);</span>
+<span class="nc" id="L213">		return questioner.getChoice(question);</span>
+	}
+
+	/**
+	 * Returns the item selected out of an Iterable of choices.
+	 * 
+	 * Their toString() method is used to make the actual list.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            The Iterable of choices
+	 * @return the selected choice
+	 * 
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	public static String askChoice(String question, Iterable&lt;Object&gt; choices) {
+<span class="nc bnc" id="L235" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L236" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L237" title="All 4 branches missed.">		assert choices.iterator().hasNext() : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L239">		Questioner questioner = new Questioner(&quot;Make a choice&quot;);</span>
+<span class="nc" id="L240">		questioner.addChoice(question, choices);</span>
+<span class="nc" id="L241">		questioner.setVisible(true);</span>
+<span class="nc" id="L242">		return questioner.getChoice(question);</span>
+	}
+
+	// ===== STRING question =====
+
+	/**
+	 * Adds a String question to the question list.
+	 * 
+	 * The room for the answer is 40 characters wide.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param initAnswer
+	 *            The initial answer String for the question
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                Question already present
+	 * @exception AssertionError
+	 *                Initial answer String can not be null
+	 */
+	public void addString(String question, String initAnswer) {
+<span class="nc bnc" id="L269" title="All 4 branches missed.">		assert !isVisible() : &quot;Questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L270" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L271" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L272" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;Question already present&quot;;</span>
+<span class="nc bnc" id="L273" title="All 4 branches missed.">		assert initAnswer != null : &quot;Initial answer String can not be null&quot;;</span>
+
+<span class="nc" id="L275">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L276">		labelPanel.add(label);</span>
+<span class="nc" id="L277">		JTextField textField = new JTextField(initAnswer, 40);</span>
+<span class="nc" id="L278">		questions.put(question, textField);</span>
+<span class="nc" id="L279">		answerPanel.add(textField);</span>
+<span class="nc" id="L280">	}</span>
+
+	public void addString(String question) {
+<span class="nc" id="L283">		addString(question, &quot;&quot;);</span>
+<span class="nc" id="L284">	}</span>
+
+	/**
+	 * Returns the current answer as a String.
+	 * 
+	 * All types of questions can return their String value.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @return the answer string
+	 * 
+	 * @exception AssertionError
+	 *                question should be present in this Questioner
+	 */
+	public String getString(String question) {
+<span class="nc bnc" id="L299" title="All 4 branches missed.">		assert questions.containsKey(question) : &quot;question should be present in this Questioner&quot;;</span>
+
+<span class="nc" id="L301">		return ((JTextField) questions.get(question)).getText();</span>
+	}
+
+	// ===== INT question =====
+
+	/**
+	 * Adds a question for an integer value to the question list
+	 * 
+	 * An input key is only accepted if the evaluation of the text provides a
+	 * legal int value, otherwise it is ignored.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param initAnswer
+	 *            The initial answer to the question
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                question is already present
+	 */
+	public void addInt(String question, int initAnswer) {
+<span class="nc bnc" id="L327" title="All 4 branches missed.">		assert !isVisible() : &quot;Questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L328" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L329" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L330" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;question already present&quot;;</span>
+
+<span class="nc" id="L332">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L333">		labelPanel.add(label);</span>
+<span class="nc" id="L334">		IntField intField = new IntField(initAnswer, 10);</span>
+<span class="nc" id="L335">		questions.put(question, intField);</span>
+<span class="nc" id="L336">		answerPanel.add(intField);</span>
+<span class="nc" id="L337">	}</span>
+
+	public void addInt(String question) {
+<span class="nc" id="L340">		addInt(question, 0);</span>
+<span class="nc" id="L341">	}</span>
+
+	/**
+	 * Returns the int value for the question. The caller must be sure the
+	 * question was about an int value.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @return the int entered
+	 * 
+	 * @exception AssertionError
+	 *                Question should be present in this Questioner
+	 * @exception AssertionError
+	 *                Wrong type for this question
+	 */
+	public int getInt(String question) {
+<span class="nc bnc" id="L357" title="All 4 branches missed.">		assert questions.containsKey(question) : &quot;Question should be present in this Questioner&quot;;</span>
+<span class="nc" id="L358">		Object reply = questions.get(question);</span>
+<span class="nc bnc" id="L359" title="All 4 branches missed.">		assert (reply instanceof IntField) : &quot;Wrong type for this question&quot;;</span>
+
+<span class="nc" id="L361">		return ((IntField) questions.get(question)).getInt();</span>
+	}
+
+	// ===== DOUBLE question =====
+
+	/**
+	 * Adds a question for a double value to the questionlist.
+	 * 
+	 * An input key is only accepted if the evaluation of the text provides a
+	 * legal double value, otherwise it is ignored.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param value
+	 *            The initial answer to the question
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                question is already present
+	 */
+	public void addDouble(String question, double value) {
+<span class="nc bnc" id="L387" title="All 4 branches missed.">		assert !isVisible() : &quot;questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L388" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L389" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L390" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;question is already present&quot;;</span>
+
+<span class="nc" id="L392">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L393">		labelPanel.add(label);</span>
+<span class="nc" id="L394">		DoubleField doubleField = new DoubleField(value, 15);</span>
+<span class="nc" id="L395">		questions.put(question, doubleField);</span>
+<span class="nc" id="L396">		answerPanel.add(doubleField);</span>
+<span class="nc" id="L397">	}</span>
+
+	public void addDouble(String question) {
+<span class="nc" id="L400">		addDouble(question, 0);</span>
+<span class="nc" id="L401">	}</span>
+
+	/**
+	 * Returns the double value for the question. The caller must be sure the
+	 * question was about a double value.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @return the double vaue entered
+	 * 
+	 * @exception AssertionError
+	 *                question should be present in this Questioner
+	 * @exception AssertionError
+	 *                Wrong type for this question
+	 */
+	public double getDouble(String question) {
+<span class="nc bnc" id="L417" title="All 4 branches missed.">		assert questions.containsKey(question) : &quot;question should be present in this Questioner&quot;;</span>
+<span class="nc bnc" id="L418" title="All 4 branches missed.">		assert (questions.get(question) instanceof DoubleField) : &quot;Wrong type for this question&quot;;</span>
+
+<span class="nc" id="L420">		return ((DoubleField) questions.get(question)).getDouble();</span>
+	}
+
+	// ===== CHOICE question =====
+
+	/**
+	 * Adds a choice question to the questionlist.
+	 * 
+	 * The choices are taken from a array of Objects, who's toString() method is
+	 * invoked to get their String representation.
+	 * 
+	 * Of the chosen item, the string representation is returned.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            All the choices as an array of Objects.
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                question is already present
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	public void addChoice(String question, Object[] choices) {
+<span class="nc bnc" id="L450" title="All 4 branches missed.">		assert !isVisible() : &quot;Questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L451" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L452" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L453" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;question already present&quot;;</span>
+<span class="nc bnc" id="L454" title="All 4 branches missed.">		assert choices.length &gt; 0 : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L456">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L457">		labelPanel.add(label);</span>
+<span class="nc" id="L458">		ChoiceField choiceField = new ChoiceField(choices);</span>
+<span class="nc" id="L459">		questions.put(question, choiceField);</span>
+<span class="nc" id="L460">		answerPanel.add(choiceField);</span>
+<span class="nc" id="L461">	}</span>
+
+	/**
+	 * Adds a choice question to the questionlist.
+	 * 
+	 * The choices are taken from a Enumeration of Objects, who's toString()
+	 * method is invoked to get their String representation.
+	 * 
+	 * Of the chosen item, the string representation is returned.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            All the choices as an Enumeration
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                question is already present
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	@SuppressWarnings(&quot;rawtypes&quot;)
+	public void addChoice(String question, Enumeration choices) {
+<span class="nc bnc" id="L489" title="All 4 branches missed.">		assert !isVisible() : &quot;Questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L490" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L491" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L492" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;question already present&quot;;</span>
+<span class="nc bnc" id="L493" title="All 4 branches missed.">		assert choices.hasMoreElements() : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L495">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L496">		labelPanel.add(label);</span>
+<span class="nc" id="L497">		ChoiceField choiceField = new ChoiceField(choices);</span>
+<span class="nc" id="L498">		questions.put(question, choiceField);</span>
+<span class="nc" id="L499">		answerPanel.add(choiceField);</span>
+<span class="nc" id="L500">	}</span>
+
+	/**
+	 * Adds a choice question to the questionlist.
+	 * 
+	 * The choices are taken from an Iterable of Objects, who's toString()
+	 * method is invoked to get their String representation.
+	 * 
+	 * Of the chosen item, the string representation is returned.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @param choices
+	 *            All the choices as an Iterable
+	 * 
+	 * @exception AssertionError
+	 *                Questioner may not be visible
+	 * @exception AssertionError
+	 *                question String can not be null
+	 * @exception AssertionError
+	 *                question String can not be empty
+	 * @exception AssertionError
+	 *                question is already present
+	 * @exception AssertionError
+	 *                choices should have at least one element
+	 */
+	public void addChoice(String question, Iterable&lt;Object&gt; choices) {
+<span class="nc bnc" id="L527" title="All 4 branches missed.">		assert !isVisible() : &quot;Questioner may not be visible&quot;;</span>
+<span class="nc bnc" id="L528" title="All 4 branches missed.">		assert question != null : &quot;question String can not be null&quot;;</span>
+<span class="nc bnc" id="L529" title="All 4 branches missed.">		assert !question.isEmpty() : &quot;question String can not be empty&quot;;</span>
+<span class="nc bnc" id="L530" title="All 4 branches missed.">		assert !questions.containsKey(question) : &quot;question already present&quot;;</span>
+<span class="nc bnc" id="L531" title="All 4 branches missed.">		assert choices.iterator().hasNext() : &quot;choices should have at least one element&quot;;</span>
+
+<span class="nc" id="L533">		JLabel label = new JLabel(question);</span>
+<span class="nc" id="L534">		labelPanel.add(label);</span>
+<span class="nc" id="L535">		ChoiceField choiceField = new ChoiceField(choices);</span>
+<span class="nc" id="L536">		questions.put(question, choiceField);</span>
+<span class="nc" id="L537">		answerPanel.add(choiceField);</span>
+<span class="nc" id="L538">	}</span>
+
+	/**
+	 * Returns the selected string from the given choices.
+	 * 
+	 * The caller must be sure the question was a choice.
+	 * 
+	 * @param question
+	 *            The question string
+	 * @return the selected choice string
+	 * 
+	 * @exception AssertionError
+	 *                question should be present in this Questioner
+	 * @exception AssertionError
+	 *                wrong type for this question
+	 */
+	public String getChoice(String question) {
+<span class="nc bnc" id="L555" title="All 4 branches missed.">		assert questions.containsKey(question) : &quot;question should be present in this Questioner&quot;;</span>
+<span class="nc bnc" id="L556" title="All 4 branches missed.">		assert (questions.get(question) instanceof ChoiceField) : &quot;wrong type for this question&quot;;</span>
+
+<span class="nc" id="L558">		return ((ChoiceField) questions.get(question)).getSelectedItem();</span>
+	}
+
+	/**
+	 * Returns the index of the selected item from the given choices.
+	 * 
+	 * The caller must be sure the question was a choice.
+	 * 
+	 * @param question
+	 *            The question String
+	 * @return the index
+	 * 
+	 * @exception AssertionError
+	 *                question should be present in this Questioner
+	 * @exception AssertionError
+	 *                wrong type for this question
+	 */
+	public int getSelectedIndex(String question) {
+<span class="nc bnc" id="L576" title="All 4 branches missed.">		assert questions.containsKey(question) : &quot;question should be present in this Questioner&quot;;</span>
+<span class="nc bnc" id="L577" title="All 4 branches missed.">		assert (questions.get(question) instanceof ChoiceField) : &quot;wrong type for this question&quot;;</span>
+
+<span class="nc" id="L579">		return ((ChoiceField) questions.get(question)).getSelectedIndex();</span>
+	}
+
+	// ===== ENUM question (one day in the distant feature) =====
+
+	// public void addEnum(String question, Enum&lt;?&gt;[] choices) {
+	// assert !isVisible() : &quot;Questioner may not be visible&quot;;
+	// assert question != null : &quot;question String can not be null&quot;;
+	// assert !question.isEmpty() : &quot;question String can not be empty&quot;;
+	// assert !questions.containsKey(question) : &quot;question already present&quot;;
+	// assert choices.length &gt; 0 : &quot;choices should have at least one element&quot;;
+	// JLabel label = new JLabel(question);
+	// labelPanel.add(label);
+	// ChoiceField choiceField = new ChoiceField(choices);
+	// questions.put(question, choiceField);
+	// answerPanel.add(choiceField);
+	// }
+
+	// public Enum&lt;?&gt; getEnum(String question) {
+	// assert questions.containsKey(question) :
+	// &quot;question should be present in this Questioner&quot;;
+	// assert (questions.get(question) instanceof ChoiceField) :
+	// &quot;wrong type for this question&quot;;
+	// String x = ((ChoiceField) questions.get(question)).getItem();
+	// if (x == null) return null;
+	// return null;
+	// }
+
+	// ---------------------------
+
+	/**
+	 * @return true when the Questioner was cancelled
+	 */
+	public boolean isCancelled() {
+<span class="nc" id="L613">		return cancelled;</span>
+	}
+
+	/**
+	 * @return true when the OKE button was clicked
+	 */
+	public boolean isOke() {
+<span class="nc bnc" id="L620" title="All 2 branches missed.">		return !cancelled;</span>
+	}
+
+	// ---------------------------
+
+	/**
+	 * Handles the buttons, should not be invoked from outside this class!
+	 */
+	public void actionPerformed(ActionEvent ae) {
+<span class="nc" id="L629">		Object source = ae.getSource();</span>
+<span class="nc bnc" id="L630" title="All 2 branches missed.">		if (source == ok) { // ok button</span>
+<span class="nc" id="L631">			cancelled = false;</span>
+			// dispose(); // not used because of slow response
+<span class="nc" id="L633">			setVisible(false);</span>
+<span class="nc bnc" id="L634" title="All 2 branches missed.">		} else if (source == cancel) { // cancel button</span>
+<span class="nc" id="L635">			cancelled = true;</span>
+			// dispose(); // not used because of slow response
+<span class="nc" id="L637">			setVisible(false);</span>
+		}
+<span class="nc" id="L639">	}</span>
+
+	/**
+	 * Makes the Questioner visible at it's preferred size
+	 * 
+	 * @param show
+	 *            the desired state
+	 */
+	public void setVisible(boolean show) {
+<span class="nc bnc" id="L648" title="All 2 branches missed.">		if (show) {</span>
+<span class="nc" id="L649">			pack();</span>
+<span class="nc" id="L650">			setResizable(false);</span>
+		}
+<span class="nc" id="L652">		super.setVisible(show);</span>
+<span class="nc" id="L653">	}</span>
+
+	// /**
+	// * @deprecated Makes the Questioner visible at it's preferred size
+	// */
+	// public void show() { // AKK: deprecated
+	// pack();
+	// //setCenterLocation();
+	// setResizable(false);
+	// super.show(); // AKK: deprecated
+	// }
+	//
+	// /*
+	// * private methods
+	// */
+	//
+	// private void setCenterLocation() {
+	// Toolkit toolkit = Toolkit.getDefaultToolkit();
+	// Dimension screen = toolkit.getScreenSize();
+	// Dimension component = getSize();
+	// setLocation((screen.width - component.width) / 2, (screen.height -
+	// component.height) / 2);
+	// }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
